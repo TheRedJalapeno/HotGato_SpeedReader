@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+    <head>
+<style>
+
+.body-Dyslexia {    font-family: 'Comic Sans MS', 'Helvetica', serif;}
+.body-ADHD {    font-family: 'Open-sans', sans-serif;}
+.body-sans-serif {    font-family: sans-serif;}
+.body-serif {    font-family: serif;}
+.body-monospace {    font-family: monospace;}
+
+
+  
+body {
+  font-family: cursive;
+  color: #333;
+  padding: 20px;
+}
+#mainContainer {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+textarea {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  margin: 10px 0;
+  font-family: inherit;
+}
+input[type="range"] {
+  width: auto;
+}
+label {
+  display: inline-block;
+  margin: 0;
+}
+div.inputblock {
+  margin: 10px 0;
+}
+button {
+  display: block;
+  margin: 10px 0;
+  padding: 10px;
+}
+#textOutput {
+  width: 100%;
+  height: 500px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;  /* Default font size */
+  overflow-wrap: break-word;
+}
+.highlight {
+  font-weight: bold;
+  color: red;
+}
+
+@media only screen and (max-width: 480px) {
+  body {
+  color: #333;
+  padding: 20px;
+}
+#mainContainer {
+  width: 95%;
+  max-width: 95%;
+  margin: 0 auto;
+}
+textarea {
+  width: 90%;
+  height: 50px;
+  padding: 10px;
+  margin: 10px 0;
+}
+input[type="range"] {
+  width: auto;
+}
+label {
+  display: inline-block;
+  margin: 0;
+}
+button {
+  display: block;
+  margin: 10px 0;
+  padding: 10px;
+}
+#textOutput {
+  width: 100%;
+  height: 500px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;  /* Default font size */
+}
+}
+
+</style>
+        <script src="core.js" defer></script>
+    </head>
+<body>
+    <div id="mainContainer">
+        <h1>Speed Reader</h1>
+      <div class="inputblock">
+        <label for=textinput>Text Input</label>
+        <textarea id="textInput" placeholder="Enter your text here..."></textarea>
+      </div>
+      <div class="inputblock">
+        <input type="range" id="speedSelector" min="100" max="1500" step="100" value="100"/>
+        <label for="speedSelector">
+            Reading Speed: 
+            <span id="speedValue">100</span> 
+            WPM
+        </label>
+      </div>
+      <div class="inputblock">
+        <input type="range" id="chunkSize" min="1" max="6" value="1"/>
+        <label for="chunkSize">
+            Chunk Size: 
+            <span id="chunkValue">1</span> 
+            Words
+        </label>
+      </div>
+      <div class="inputblock">
+        <input type="range" id="fontSize" min="10" max="80" value="25"/>
+        <label for="fontSize">
+            Font Size: 
+            <span id="fontValue">20</span> 
+            px
+        </label>
+      </div>
+      <div class="inputblock">
+        <select id="fontFamily">
+            <option value="Dyslexia">Dyslexia</option>
+            <option value="ADHD">ADHD</option>
+            <option selected value="sans-serif">Sans-Serif</option>
+            <option value="serif">Serif</option>
+            <option value="monospace">Monospace</option>
+            <!-- include any other fonts you'd like here... -->
+        </select>
+        <label for="fontFamily">Font Family</label>
+      </div>
+      <div class="inputblock">
+        <button id="startPause" type="button">Start</button>
+        <div id="textOutput"></div>
+      </div>
+<div>
+  <h3>About this service</h3>
+  <ul>
+    <li>100% offline, zero dependencies, no servers, nothing. IT approved.</li>
+    <li>Font selector includes Dyslexia and ADHD presets.</li>
+    <li>ADHD font highlights the first two letters of every word.</li>
+    <li>Speed automatically slows for all numbers and special characters.</li>
+    <li>Your settings are remembered in your browser for convenience.</li>
+  </ul>
+  <h3>Note from the author</h3>
+  <p>When I was a research assistant in grad school I leaned on Spreeder like my life depended on it. I even submitted a suggestion for Kindle for Android to build the feature, and half a year later Amazon released WordRunner. My ADHD hits hardest when reading long documents, and I've oft griped about authors hiding details where I would never find them - in paragraphs and long lists. I built this tool so I can benefit from my preferred speed reading technique for confidential materials. This app is entirely offline, and supports a handful of features competitors like Spreeder and WordRunner lack.</p>
+  <p>- Robert Allen (www.RDAMBA.com) July 2023</p>
+</div>
+
+    </div>
+</body>
+</html>
