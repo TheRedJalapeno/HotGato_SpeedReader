@@ -1,6 +1,7 @@
 // Define all the variables
 let textInput;
 let speedSelector;
+let pauseSpeedSelector;
 let chunkSelector;
 let fontSizeSelector;
 let fontFamilySelector;
@@ -9,10 +10,26 @@ let textOutput;
 let reading;
 let isReading = false;
 
+function initializeFromStorage(itemName, valueElementId) {
+  const value = localStorage.getItem(itemName);
+  if(value) {
+    document.getElementById(valueElementId).innerHTML = value;
+  }
+  return value;
+}
+
+function addInputListener(source, targetId, localStorageName) {
+  source.addEventListener('input', function() {
+    document.getElementById(targetId).innerHTML = this.value;
+    localStorage.setItem(localStorageName, this.value);
+  });
+}
+
 document.addEventListener('DOMContentLoaded', (event) => {
   // Assign the variables
   textInput = document.getElementById('textInput');
   speedSelector = document.getElementById('speedSelector');
+  pauseSpeedSelector = document.getElementById('pauseSpeedSelector');
   chunkSelector = document.getElementById('chunkSize');
   fontSizeSelector = document.getElementById('fontSize');
   fontFamilySelector = document.getElementById('fontFamily');
@@ -20,49 +37,29 @@ document.addEventListener('DOMContentLoaded', (event) => {
   textOutput = document.getElementById('textOutput');
 
   // Load settings from localStorage
-  const speedSelectorValue = localStorage.getItem('speedSelector');
-  const chunkSizeValue = localStorage.getItem('chunkSize');
-  const fontSizeValue = localStorage.getItem('fontSize');
-  const fontFamilyValue = localStorage.getItem('fontFamily');
-  
-  if (speedSelectorValue) {
-    speedSelector.value = speedSelectorValue;
-    document.getElementById('speedValue').innerHTML = speedSelectorValue;
-  }
-  
-  if (chunkSizeValue) {
-    chunkSelector.value = chunkSizeValue;
-    document.getElementById('chunkValue').innerHTML = chunkSizeValue;
-  }
-  
+  speedSelector.value = initializeFromStorage('speedSelector', 'speedValue');
+  pauseSpeedSelector.value = initializeFromStorage('pauseSpeedSelector', 'pauseSpeedValue');
+  chunkSelector.value = initializeFromStorage('chunkSize', 'chunkValue');
+  const fontSizeValue = initializeFromStorage('fontSize', 'fontValue');
   if (fontSizeValue) {
     fontSizeSelector.value = fontSizeValue;
-    document.getElementById('fontValue').innerHTML = fontSizeValue;
     textOutput.style.fontSize = fontSizeValue + 'px';
   }
-  
+  const fontFamilyValue = localStorage.getItem('fontFamily');
   if (fontFamilyValue) {
     fontFamilySelector.value = fontFamilyValue;
     //textOutput.style.fontFamily = fontFamilyValue;
   }
 
   // Set up event listeners
-  speedSelector.addEventListener('input', function() {
-    document.getElementById('speedValue').innerHTML = this.value;
-    localStorage.setItem('speedSelector', this.value); // save to localStorage
-  });
-
-  chunkSelector.addEventListener('input', function() {
-    document.getElementById('chunkValue').innerHTML = this.value;
-    localStorage.setItem('chunkSize', this.value); // save to localStorage
-  });
-
+  addInputListener(speedSelector, 'speedValue', 'speedSelector');
+  addInputListener(pauseSpeedSelector, 'pauseSpeedValue', 'pauseSpeedSelector');
+  addInputListener(chunkSelector, 'chunkValue', 'chunkSize');
   fontSizeSelector.addEventListener('input', function() {
     document.getElementById('fontValue').innerHTML = this.value;
     textOutput.style.fontSize = this.value + 'px';
     localStorage.setItem('fontSize', this.value); // save to localStorage
   });
-
   fontFamilySelector.addEventListener('change', function() {
     // Add specific class if necessary
     if (this.value) {
@@ -126,7 +123,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
         // If the chunk contains a special character, add an extra delay
         if (specialCharacterRegex.test(chunkText)) {
-            delay += 60000 / parseInt(speedSelector.value) * 4; // add a delay relative to reading speed
+            delay += 60000 / parseInt(speedSelector.value) * pauseSpeedSelector.value; // add a delay relative to reading speed
         }
 
         if (fontFamilySelector.value === 'ADHD') {
