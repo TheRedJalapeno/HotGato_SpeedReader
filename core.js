@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
   function startReading() {
     let text = textInput.value;
-    let words = text.split(' ');
+    let words = text.split(/\s+/);
     let chunkSize = parseInt(chunkSelector.value);
     let i = 0;
 
