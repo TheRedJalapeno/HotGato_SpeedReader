@@ -143,6 +143,14 @@ button {
         </label>
       </div>
       <div class="inputblock">
+        <input type="range" id="pauseSpeedSelector" min="1" max="10" step=".5" value="4"/>
+        <label for="pauseSpeedSelector">
+            Pause/Speed Ratio: 
+            <span id="pauseSpeedValue">4</span>
+            <small>(Higher means longer pauses)</small>
+        </label>
+      </div>
+      <div class="inputblock">
         <input type="range" id="chunkSize" min="1" max="6" value="1"/>
         <label for="chunkSize">
             Chunk Size: 
