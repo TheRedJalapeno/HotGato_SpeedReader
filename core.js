@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
         // If the chunk contains a special character, add an extra delay
         if (specialCharacterRegex.test(chunkText)) {
-            delay += 60000 / parseInt(speedSelector.value) * pauseSpeedSelector.value; // add a delay relative to reading speed
+          delay += 60000 / parseInt(speedSelector.value) * parseFloat(pauseSpeedSelector.value);// add a delay relative to reading speed
         }
 
         if (fontFamilySelector.value === 'ADHD') {
