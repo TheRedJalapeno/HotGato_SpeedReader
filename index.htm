@@ -9,12 +9,22 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="mainContainer">
+    <div class="mainContainer">
       <img class="icon" src="hotgato_400.jpg">
-        <h1 class="title">HotGato Speed Reader</h1>
+      <h1 class="title">HotGato Speed Reader</h1>
+      
+      <div class="inputblock outputBlock">
+        <div id="textOutput"></div>
+        <button id="startPause" type="button">GO!</button>
+      </div>
+    <div class="inputContainer">
       <div class="inputblock">
-        <label for=textinput>Text Input</label>
-        <textarea id="textInput" placeholder="Enter your text here..."></textarea>
+        <input type="range" id="fontSize" min="10" max="80" value="25"/>
+        <label for="fontSize">
+            Font Size: 
+            <span id="fontValue">20</span> 
+            px
+        </label>
       </div>
       <div class="inputblock">
         <input type="range" id="speedSelector" min="100" max="1500" step="100" value="100"/>
@@ -22,14 +32,6 @@
             Reading Speed: 
             <span id="speedValue">100</span> 
             WPM
-        </label>
-      </div>
-      <div class="inputblock">
-        <input type="range" id="pauseSpeedSelector" min="1" max="10" step=".5" value="4"/>
-        <label for="pauseSpeedSelector">
-            Lengh of Punctuation Pauses: 
-            <span id="pauseSpeedValue">4</span>
-            <small>(Higher means longer pauses)</small>
         </label>
       </div>
       <div class="inputblock">
@@ -41,11 +43,11 @@
         </label>
       </div>
       <div class="inputblock">
-        <input type="range" id="fontSize" min="10" max="80" value="25"/>
-        <label for="fontSize">
-            Font Size: 
-            <span id="fontValue">20</span> 
-            px
+        <input type="range" id="pauseSpeedSelector" min="1" max="10" step=".5" value="4"/>
+        <label for="pauseSpeedSelector">
+            Punctuation Pause: 
+            <span id="pauseSpeedValue">4</span>
+            <small style="display:flex;">(Higher means longer pauses)</small>
         </label>
       </div>
       <div class="inputblock">
@@ -60,8 +62,8 @@
         <label for="fontFamily">Font Family</label>
       </div>
       <div class="inputblock">
-        <button id="startPause" type="button">Start</button>
-        <div id="textOutput"></div>
+        <label for=textinput>Text Input</label>
+        <textarea id="textInput" placeholder="Enter your text here..."></textarea>
       </div>
       <br>
       <div>
@@ -79,7 +81,7 @@
         <p>When I was a research assistant in grad school I leaned on Spreeder like my life depended on it. I even submitted a suggestion for Kindle for Android to build the feature, and half a year later Amazon released WordRunner. My ADHD hits hardest when reading long documents, and I've oft griped about authors hiding details where I would never find them - in paragraphs and long lists. I built this tool so I can benefit from my preferred speed reading technique for confidential materials. This app is entirely offline, and supports a handful of features competitors like Spreeder and WordRunner lack.</p>
         <p>- Robert Allen (<a href="https://github.com/RobertDAllen/HotGato_SpeedReader">Github</a>) July 2023</p>
       </div>
-
+    </div>
     </div>
 </body>
 </html>
