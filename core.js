@@ -168,9 +168,11 @@ function startReading() {
 
       let chunkText = chunk.join(' ');
 
+      // Compute delay based on chunk size and selected WPM
+      let delay = (chunk.length / parseInt(speedSelector.value)) * 60000;
+
       // This regex matches sentence-ending punctuation, numbers, URLs, and paragraph breaks
       const specialCharacterRegex = /(\d+(\.\d+)?|[.!?]|https?:\/\/[^\s]+|\s{2,})/g;
-      let delay = 60000 / parseInt(speedSelector.value);
 
       // If the chunk contains a special character, add an extra delay
       if (specialCharacterRegex.test(chunkText)) {
