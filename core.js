@@ -97,23 +97,35 @@ document.addEventListener('DOMContentLoaded', (event) => {
   });
 
 //-------------------------------------
+
 //-------------------------------------
 // START of splitIntoSentences function
 function splitIntoSentences(text) {
-  let splitParts = text.split(/(?<!\d)\.(?!\d)(?=\s|$|\s?[A-Z])|([!?])\s+/);
+  let splitParts = text.split(/(?<!\d)\.(?!\d)(?=\s|$|\s?[A-Z])|([!?])\s+|\n+/);
   let sentences = [];
+  
+  console.log("splitParts:", splitParts);  // Debug line
 
   for (let i = 0; i < splitParts.length; i += 2) {
-      let sentence = splitParts[i];
-      let punctuation = splitParts[i + 1] || '.'; // Default to a period if no punctuation captured
-      sentences.push(sentence.trim() + punctuation);
-  }
+    let sentence = splitParts[i];
+    let punctuation = splitParts[i + 1];
+
+    // This condition will prevent the addition of a period to the last sentence if it doesn't have one
+    if (i === splitParts.length - 2 && !punctuation) {
+        sentences.push(sentence.trim());
+    } else {
+        punctuation = punctuation || '.';
+        sentences.push(sentence.trim() + punctuation);
+    }
+}
+
 
   return sentences;
 }
-
 // END of splitIntoSentences function
+//-------------------------------------
 
+//-------------------------------------
 // START of getChunksFromSentences function
 function getChunksFromSentences(sentences, chunkSize) {
   let allWords = [];
@@ -146,10 +158,9 @@ function getChunksFromSentences(sentences, chunkSize) {
 }
 // END of getChunksFromSentences function
 //-------------------------------------
+
 //-------------------------------------
-
-
-
+// START of startReading function
 function startReading() {
   let sentences = splitIntoSentences(textInput.value);
   let chunks = getChunksFromSentences(sentences, parseInt(chunkSelector.value));
@@ -172,7 +183,7 @@ function startReading() {
       let delay = (chunk.length / parseInt(speedSelector.value)) * 60000;
 
       // This regex matches sentence-ending punctuation, numbers, URLs, and paragraph breaks
-      const specialCharacterRegex = /(\d+(\.\d+)?|[.!?]|https?:\/\/[^\s]+|\s{2,})/g;
+      const specialCharacterRegex = /(\d+(\.\d+)?|[.,!?'"`\n]|https?:\/\/[^\s]+|\s{2,})/g;
 
       // If the chunk contains a special character, add an extra delay
       if (specialCharacterRegex.test(chunkText)) {
@@ -201,7 +212,7 @@ function startReading() {
   console.log("Sentences array:", sentences);
   console.log("Chunks array:", chunks);
 }
-
+// END of startReading function
 
 
 
