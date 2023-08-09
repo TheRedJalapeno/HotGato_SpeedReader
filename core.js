@@ -101,24 +101,26 @@ document.addEventListener('DOMContentLoaded', (event) => {
 //-------------------------------------
 // START of splitIntoSentences function
 function splitIntoSentences(text) {
-  let splitParts = text.split(/(?<!\d)\.(?!\d)(?=\s|$|\s?[A-Z])|([!?])\s+|\n+/);
+  // Replace multiple newlines with a single newline
+  text = text.replace(/\n+/g, '\n');
+  let splitParts = text.split(/(?<!\d)([.!?])(?!\d)(?=\s|$|\s?[A-Z]|$)|\n+/);
   let sentences = [];
   
   console.log("splitParts:", splitParts);  // Debug line
 
-  for (let i = 0; i < splitParts.length; i += 2) {
-    let sentence = splitParts[i];
-    let punctuation = splitParts[i + 1];
+  for (let i = 0; i < splitParts.length; i++) {
+    if (splitParts[i]) { // Check if the current part exists
+      let sentence = splitParts[i].trim();
+      let punctuation = splitParts[i + 1];
 
-    // This condition will prevent the addition of a period to the last sentence if it doesn't have one
-    if (i === splitParts.length - 2 && !punctuation) {
-        sentences.push(sentence.trim());
-    } else {
-        punctuation = punctuation || '.';
-        sentences.push(sentence.trim() + punctuation);
+      if (punctuation && [".", "!", "?"].includes(punctuation)) {
+          sentences.push(sentence + punctuation);
+          i++;  // Move past the captured punctuation
+      } else {
+          sentences.push(sentence);
+      }
     }
-}
-
+  }
 
   return sentences;
 }
