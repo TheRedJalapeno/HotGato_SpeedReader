@@ -1,63 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HotGato Speed Reader</title>
-    <link rel="icon" href="hotgato_favi.jpg" type="image/jpeg" />
-    <script src="core.js" defer></script>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HotGato Speed Reader</title>
+  <link rel="icon" href="hotgato_favi.jpg" type="image/jpeg" />
+  <script src="core.js" defer></script>
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <div class="mainContainer">
-      <img class="icon" src="hotgato_400.jpg">
-      <h1 class="title">HotGato Speed Reader</h1>
-      
-      <div class="inputblock outputBlock">
-        <div id="textOutput"></div>
-        <button id="startPause" type="button">GO!</button>
-      </div>
+  <div class="mainContainer">
+    <img class="icon" src="hotgato_400.jpg">
+    <h1 class="title">HotGato Speed Reader</h1>
+
+    <div class="inputblock outputBlock">
+      <div id="textOutput"></div>
+      <button id="startPause" type="button">GO!</button>
+    </div>
     <div class="inputContainer">
       <div class="inputblock">
-        <input type="range" id="fontSize" min="10" max="80" value="25"/>
+        <input type="range" id="fontSize" min="10" max="80" value="25" />
         <label for="fontSize">
-            Font Size: 
-            <span id="fontValue">20</span> 
-            px
+          Font Size:
+          <span id="fontValue">20</span>
+          px
         </label>
       </div>
       <div class="inputblock">
-        <input type="range" id="speedSelector" min="100" max="1500" step="100" value="100"/>
+        <input type="range" id="speedSelector" min="100" max="1500" step="100" value="100" />
         <label for="speedSelector">
-            Reading Speed: 
-            <span id="speedValue">100</span> 
-            WPM
+          Reading Speed:
+          <span id="speedValue">100</span>
+          WPM
         </label>
       </div>
       <div class="inputblock">
-        <input type="range" id="chunkSize" min="1" max="6" value="1"/>
+        <input type="range" id="chunkSize" min="1" max="6" value="1" />
         <label for="chunkSize">
-            Chunk Size: 
-            <span id="chunkValue">1</span> 
-            Words
+          Chunk Size:
+          <span id="chunkValue">1</span>
+          Words
         </label>
       </div>
       <div class="inputblock">
-        <input type="range" id="pauseSpeedSelector" min="1" max="10" step=".5" value="4"/>
+        <input type="range" id="pauseSpeedSelector" min="1" max="10" step=".5" value="4" />
         <label for="pauseSpeedSelector">
-            Punctuation Pause: 
-            <span id="pauseSpeedValue">4</span>
-            <small style="display:flex;">(Higher means longer pauses)</small>
+          Punctuation Pause:
+          <span id="pauseSpeedValue">4</span>
+          <small style="display:flex;">(Higher means longer pauses)</small>
         </label>
       </div>
       <div class="inputblock">
         <select id="fontFamily">
-            <option value="Dyslexia">Dyslexia</option>
-            <option value="ADHD">ADHD</option>
-            <option selected value="sans-serif">Sans-Serif</option>
-            <option value="serif">Serif</option>
-            <option value="monospace">Monospace</option>
-            <!-- include any other fonts you'd like here... -->
+          <option value="Dyslexia">Dyslexia</option>
+          <option value="ADHD">ADHD</option>
+          <option selected value="sans-serif">Sans-Serif</option>
+          <option value="serif">Serif</option>
+          <option value="monospace">Monospace</option>
+          <!-- include other fonts -->
         </select>
         <label for="fontFamily">Font Family</label>
       </div>
@@ -66,54 +68,99 @@
         <textarea id="textInput" placeholder="Enter your text here..."></textarea>
       </div>
       <br>
+      <!-- Instructions -->
       <div>
         <h3>How to use HotGato</h3>
-        <p>Bump up the font size, sit back, and relax your eyes. Do not try to read, just try to relax. Your brain will pull the words in all by itself.</p>
-        <p>When getting used to this sort of reading, use one or two paragraphs, start at 300 wpm, and reread it until you get the hang of it. It might take a few tries, but it will click for you and become easy. After that you can start experimenting with speed, chunk size, and punctuation pauses.</p>
-        <p>Everyone has different preferences for their settings, so once you found something comfortable, add new text and see what you can do!</p>
-        <br>
+        <p>Bump up the font size, sit back, and relax your eyes. Do not try to read, just try to relax. Your brain will
+          pull the words in all by itself.</p>
+        <p>When getting used to this sort of reading, use one or two paragraphs, start at 300 wpm, and reread it until
+          you get the hang of it. It might take a few tries, but it will click for you and become easy. After that you
+          can start experimenting with speed, chunk size, and punctuation pauses.</p>
+        <p>Everyone has different preferences for their settings, so once you found something comfortable, add new text
+          and see what you can do!</p>
+
+        <!-- About -->
         <h3>About HotGato</h3>
         <ul>
           <li><strong>Editable</strong> - You can edit the code to suit your needs, or fork in Github.</li>
-          <li><strong>Secure</strong> - All code is client-side, you can download for offline use, and even get IT approval for use with confidential materials.</li>
-          <li><strong>Accessible</strong> - Font selector includes "bionic reading" setting for ADHD and non-fungible 'cursive' fonts for Dyslexia.</li>
-          <li><strong>Comfortable</strong> - Speed automatically slows for all numbers and special characters so you can read 3.89 and 3.98 with ease.</li>
+          <li><strong>Secure</strong> - All code is client-side, you can download for offline use, and even get IT
+            approval for use with confidential materials.</li>
+          <li><strong>Accessible</strong> - Font selector includes "bionic reading" setting for ADHD and non-fungible
+            'cursive' fonts for Dyslexia.</li>
+          <li><strong>Comfortable</strong> - Speed automatically slows for all numbers and special characters so you can
+            read 3.89 and 3.98 with ease.</li>
           <li><strong>Thoughtful</strong> - Your settings are remembered in your browser for convenience.</li>
-          <li><strong>Forkable</strong> - You are welcome to fork <a href="https://github.com/TheRedJalapeno/HotGato_SpeedReader">HotGato on Github</a></li>
+          <li><strong>Forkable</strong> - You are welcome to fork <a
+              href="https://github.com/TheRedJalapeno/HotGato_SpeedReader">HotGato on Github</a></li>
         </ul>
-        <br>
+
+        <!-- External Links -->
+        <h3>Links</h3>
+        <div class="container">
+          
+          <a class="extlinks" href="https://chromewebstore.google.com/detail/hotgato-speed-reader/ogecmlkfllamfilgdigmaifjcbmfhgib">
+            <div class="sidebyside">
+              <img class="linklogo" src="chrome.svg"><p>Chrome Extension</p>
+            </div></a>
+
+          <a class="extlinks" href="https://addons.mozilla.org/en-US/firefox/addon/hotgato-speed-reader/">
+            <div class="sidebyside">
+              <img class="linklogo" src="firefox.svg"><p>Firefox Add-On</p>
+            </div></a>
+
+          <a class="extlinks" href="https://github.com/TheRedJalapeno/HotGato_SpeedReader">
+            <div class="sidebyside">
+              <img class="linklogo" src="github.svg"><p>Github</p>
+            </div></a>
+        </div>
+
+        <!-- Personal Note 
         <h3>Note from the author</h3>
-        <p>In grad school I relied on Spreeder to comb through hundreds of research papers. That would have been impossible without the service. I even submitted a suggestion for the Amazon Kindle for Android team to build the feature, and half a year later Amazon released Kindle WordRunner. Years later while working at Amazon, the doc writing culture meant dozens of Privileged & Confidential materials and no 'secure' speed reading options. HotGato was built to enable all of us to speed read in any circumstance, including for confidential materials. HotGato is entirely client-side (ONCE YOU REMOVE THE GOOGLE ANALYTICS TAG), and you can download a copy from GitHub for your IT team to review. HotGato even supports a handful of features competitors like Spreeder and WordRunner lack. I hope you enjoy.</p>
+        <p>In grad school I relied on Spreeder to comb through hundreds of research papers. That would have been
+          impossible without the service. I even submitted a suggestion for the Amazon Kindle for Android team to build
+          the feature, and half a year later Amazon released Kindle WordRunner. Years later while working at Amazon, the
+          doc writing culture meant dozens of Privileged & Confidential materials and no 'secure' speed reading options.
+          HotGato was built to enable all of us to speed read in any circumstance, including for confidential materials.
+          HotGato is entirely client-side (ONCE YOU REMOVE THE GOOGLE ANALYTICS TAG), and you can download a copy from
+          GitHub for your IT team to review. HotGato even supports a handful of features competitors like Spreeder and
+          WordRunner lack. I hope you enjoy.</p>
         <p>- Robert Allen (<a href="https://github.com/TheRedJalapeno/HotGato_SpeedReader">Github</a>) July 2023</p>
+        <br>
+        -->
       </div>
     </div>
-    </div>
+  </div>
 
-
-    <!-- About the author -->
-    <div id="about" style="position: fixed; bottom: 10px; left: 10px; z-index: 1000; font-family: sans-serif;">
-      <div id="about-trigger" style="width: 45px; height: 45px; background-color: white; border-radius: 8px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); display: flex; justify-content: center; align-items: center; cursor: pointer; font-size: 24px;">?</div>
-      <div id="about-box" style="display: none; width: 300px; background-color: white; border-radius: 8px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); padding: 15px; position: absolute; bottom: 55px; left: 0;">
-          <div style="max-height: 300px; overflow-y: auto;">
-              <p class="headline" style="font-size: 1.1em; font-weight: bold; margin: 10px 0;">About the Author</p>
-              <p style="margin: 10px 0;">Robert is an absurdist, a futurist, and an absurd futurist. This site is made with love.</p>
-              <a href="https://github.com/TheRedJalapeno/">GitHub Profile</a>
-          </div>
+  <!-- About the author -->
+  <div id=" about" style="position: fixed; bottom: 10px; left: 10px; z-index: 1000; font-family: sans-serif;">
+    <div id="about-trigger"
+      style="width: 45px; height: 45px; background-color: white; border-radius: 8px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); display: flex; justify-content: center; align-items: center; cursor: pointer; font-size: 24px;">
+      ?</div>
+    <div id="about-box"
+      style="display: none; width: 300px; background-color: white; border-radius: 8px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); padding: 15px; position: absolute; bottom: 55px; left: 0;">
+      <div style="max-height: 300px; overflow-y: auto;">
+        <p class="headline" style="font-size: 1.1em; font-weight: bold; margin: 10px 0;">About the Author</p>
+        <p style="margin: 10px 0;">Robert is an absurdist, a futurist, and an absurd futurist. This site is made
+          with love.</p>
+        <a href="https://github.com/TheRedJalapeno/">GitHub Profile</a>
       </div>
     </div>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2SDKE8KJHN"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+  </div>
 
-      gtag('config', 'G-2SDKE8KJHN');
-    </script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2SDKE8KJHN"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
 
-    <!-- Google Adsense -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5058258078034240"
+    gtag('config', 'G-2SDKE8KJHN');
+  </script>
+
+  <!-- Google Adsense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5058258078034240"
     crossorigin="anonymous"></script>
-    
+
 </body>
+
 </html>

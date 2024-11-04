@@ -6,6 +6,11 @@
 .body-monospace {    font-family: monospace;}
 
 
+h1, h2, h3 {
+  margin-top: 1.7em;
+  margin-bottom: .5em;
+}
+
   
 body {
   font-family: sans-serif;
@@ -87,6 +92,37 @@ button {
   font-weight: bold;
   color: inherit;
 }
+
+
+.container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1em;
+  justify-content: center;
+}
+a.extlinks {
+  padding: 0;
+}
+div.sidebyside {
+  display: inline-block;
+  margin: auto;
+  border: 1px solid gray;
+  border-radius: 8px;
+}
+img.linklogo {
+  width: 48px;
+  height: auto;
+  display: block;
+  padding-top: 1em;
+  margin: auto;
+}
+.sidebyside p {
+  display: block;
+  margin: 1em;
+  text-align: center;
+}
+
 
 @media only screen and (max-width: 480px) {
   body {
