@@ -46,10 +46,12 @@ img.icon:hover {
 }
 textarea {
   width: 100%;
-  height: 100px;
-  padding: 10px;
-  margin: 10px 0;
+  height: 5em;
+  padding: 1em;
+  margin-top: 10px;
   font-family: inherit;
+  border-radius: 8px;
+  border: 1px solid #ccc;
 }
 input[type="range"] {
   width: auto;
@@ -85,6 +87,7 @@ button {
   overflow-wrap: break-word;
   text-align: center;
   line-height: 4em;
+  border-radius: 8px;
 }
 .highlight {
   font-weight: bold;
@@ -128,18 +131,17 @@ img.linklogo {
 @media only screen and (max-width: 480px) {
   body {
   color: #333;
-  padding: 20px;
 }
 #mainContainer {
   width: 95%;
   max-width: 95%;
   margin: 0 auto;
 }
+div.inputblock {
+  margin: 20px 0;
+}
 textarea {
   width: 90%;
-  height: 50px;
-  padding: 10px;
-  margin: 10px 0;
 }
 input[type="range"] {
   width: auto;
@@ -165,7 +167,7 @@ button {
   min-height: 200px;
   border: 1px solid #ccc;
   padding: 10px;
-  margin-top: 20px;
+  margin: auto;
   display: flex;
   align-items: center;
   justify-content: center;
