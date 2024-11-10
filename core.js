@@ -214,8 +214,8 @@ function startReading() {
           delay += 60000 / parseInt(speedSelector.value) * parseFloat(pauseSpeedSelector.value); // add a delay relative to reading speed
       }
 
-      // If the selected font family is "ADHD", highlight the first two letters
-      if (fontFamilySelector.value === 'ADHD') {
+      // If the selected font family is "Bionic", highlight the first two letters
+      if (fontFamilySelector.value === 'Bionic') {
           chunkText = highlightFirstTwoLetters(chunkText);
       }
       function highlightFirstTwoLetters(text) {
