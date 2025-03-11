@@ -8,12 +8,14 @@
   <link rel="icon" href="hotgato_favi.jpg" type="image/jpeg" />
   <script src="core.js" defer></script>
   <link rel="stylesheet" href="style.css">
+  <meta seom="description" content="HotGato Speed Reader is a web-based speed reading tool that allows you to read text at adjustable speeds, with customizable font sizes and styles.">
+  <meta name="keywords" content="speed reading, text reader, adjustable speed, font size, font style, web-based reader">
 </head>
 
 <body>
   <div class="mainContainer">
     <img class="icon" src="hotgato_400.jpg">
-    <h1 class="title">HotGato Speed Reader</h1>
+    <h1 class="title">HotGato Speed&nbsp;Reader</h1>
 
     <div class="inputblock outputBlock">
       <div id="textOutput"></div>
@@ -49,7 +51,7 @@
         <label for="pauseSpeedSelector">
           Punctuation Pause:
           <span id="pauseSpeedValue">4</span>
-          <small style="display:flex;">(Higher means longer pauses)</small>
+          <div class="tooltip">&nbsp;?&nbsp;<span class="tooltiptext"><small style="display:flex;">This slows down playback for any numbers or punctuation.</small></span></div>
         </label>
       </div>
       <div class="inputblock">
@@ -64,7 +66,6 @@
         <label for="fontFamily">Font Family</label>
       </div>
       <div class="inputblock">
-        <label for=textinput>Text Input</label>
         <textarea id="textInput" placeholder="Enter your text here..."></textarea>
       </div>
       <br>
@@ -138,17 +139,7 @@
 
   <!-- Footer -->
   <div id="footer" class="container footer">
-    <div class="about">
-      <p class="headline" style="font-size: 1.1em; font-weight: bold; margin: 10px 0;">About the Author</p>
-      <p>Robert is a true Renaissance&nbsp;man.</p>
-      <p>After a successful career spanning product management, performance marketing, front end engineering, and
-        executive leadership at Fortune 500 tech and financial services, he is
-        now a published science fiction&nbsp;author.</p>
-      <p>He fell in love with the RSVP style of speed reading in grad
-        school, so naturally HotGato was the first thing he made after leaving corporate.</p>
-      <p>He is an absurdist, a futurist, and a jovial&nbsp;nihilist.</p>
-      <a href="https://github.com/TheRedJalapeno/" target="_blank">GitHub Profile</a>
-    </div>
+
     <div class="externalWidget">
       <a href="https://www.producthunt.com/posts/hotgato-speed-reader?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-hotgato&#0045;speed&#0045;reader"
         target="_blank"><img
@@ -157,10 +148,10 @@
           style="width: 250px; height: 54px;" width="250" height="54" /></a>
     </div>
     <div class="copyright">
-      <p>Reach out by email to <span>Hi@</span>HotGato.com</p>
-      <p>Copyright 2024, ZingLab LLC</p>
-      <p><a href="https://zinglab.com" target="_blank"><img src="experiment_36dp_F19E39_FILL0_wght400_GRAD0_opsz40.svg"
-            style="height:16px;width:16px;"></a></p>
+      <p>Reach out by email to <span>HotGato@</span>ZingLab.com</p>
+      <p>Copyright <span id="year"></span>, ZingLab LLC</p>
+      <p><a href="https://zinglab.com/" target="_blank"><img src="experiment_36dp_F19E39_FILL0_wght400_GRAD0_opsz40.svg"
+            style="height:24px;width:24px;"></a></p>
     </div>
   </div>
 
@@ -181,6 +172,11 @@
       crossorigin="anonymous"></script>
 
   </deleteThisForOfflineMode>
+
+<script>
+// Set the current year in the footer
+  document.getElementById("year").innerHTML = new Date().getFullYear();
+</script>
 
 
 </body>

@@ -69,9 +69,9 @@ img.icon:hover {
 }
 
 textarea {
-  width: 100%;
+  width: 97%;
   height: 5em;
-  padding: 1em;
+  padding: 1%;
   margin-top: 10px;
   font-family: inherit;
   border-radius: 8px;
@@ -79,13 +79,42 @@ textarea {
 }
 
 input[type="range"] {
-  width: auto;
+  width: 130px;
+}
+select {
+  width: 130px;
+  margin-right: 5px;
 }
 
 label {
   display: inline-block;
-  margin: 0;
+  margin: 3px 0 0 5px;
+  position: absolute;
 }
+
+/* Tooltip container */
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+  margin: 0 5px;
+}
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 180px;
+  background-color: darkslategrey;
+  color: ivory;
+  text-align: center;
+  padding: 5px;
+  border-radius: 8px;
+  position: absolute;
+  z-index: 1;
+}
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+/* END of tooltip */
+
 
 div.inputblock {
   margin: 10px 0;
@@ -183,7 +212,6 @@ div.about p {
   margin: .5em 0
 }
 
-div.copyright {}
 
 @media only screen and (max-width: 480px) {
   body {
@@ -210,7 +238,8 @@ div.copyright {}
 
   label {
     display: inline-block;
-    margin: 0;
+    margin: 3px 0 0 5px;
+    position: absolute;
   }
 
   button {
