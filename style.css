@@ -1,3 +1,62 @@
+:root {
+  /* Light mode (default) */
+  --background-color: #fff;
+  --text-color: #333;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Dark mode */
+    --background-color: #333;
+    --text-color: #cbcbcb;
+  }
+}
+
+/* Macro Styles */
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+h1,
+h2,
+h3 {
+  margin-top: 1.7em;
+  margin-bottom: .5em;
+}
+
+a {
+  color: orangered;
+}
+
+body {
+  font-family: sans-serif;
+  margin: 0;
+}
+
+/* Dark Mode Light Mode */
+body.light-theme {
+  background-color: #fff;
+  color: #333;
+}
+body.dark-theme {
+  background-color: #333;
+  color: #cbcbcb;
+}
+body.light-theme a {
+  color: orangered;
+}
+body.dark-theme a {
+  color: chocolate;
+}
+
+div.lightdarkselector {
+  position: fixed;
+  top: 1em;
+  left: 1em;
+}
+
+/* Font Selector */
 .body-Dyslexia {
   font-family: 'Comic Sans MS', cursive;
 }
@@ -18,25 +77,7 @@
   font-family: monospace;
 }
 
-
-h1,
-h2,
-h3 {
-  margin-top: 1.7em;
-  margin-bottom: .5em;
-}
-
-
-body {
-  font-family: sans-serif;
-  color: #333;
-  margin: 0;
-}
-
-a {
-  color: orangered;
-}
-
+/* Main CSS */
 .mainContainer {
   max-width: 1000px;
   margin: 0 auto;
@@ -76,6 +117,8 @@ textarea {
   font-family: inherit;
   border-radius: 8px;
   border: 1px solid #ccc;
+  background-color: inherit;
+  color: inherit;
 }
 
 input[type="range"] {
@@ -214,10 +257,6 @@ div.about p {
 
 
 @media only screen and (max-width: 480px) {
-  body {
-    color: #333;
-  }
-
   #mainContainer {
     width: 95%;
     max-width: 95%;
@@ -234,6 +273,7 @@ div.about p {
 
   input[type="range"] {
     width: auto;
+    max-width: 100px;
   }
 
   label {

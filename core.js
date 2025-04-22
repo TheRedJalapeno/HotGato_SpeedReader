@@ -21,6 +21,7 @@ const DEFAULT_VALUES = {
   fontSize: 25,            // Minimum font size
   fontFamily: 'sans-serif' // Default font family
 };
+const textOutputElement = document.getElementById('textOutput');
 
 // Safe way to update UI elements
 function updateUIElement(elementId, value) {
@@ -49,8 +50,9 @@ function initializeSettings() {
   textOutput.style.fontSize = DEFAULT_VALUES.fontSize + 'px';
   
   fontFamilySelector.value = DEFAULT_VALUES.fontFamily;
-  document.body.className = '';
-  document.body.classList.add('body-' + DEFAULT_VALUES.fontFamily);
+  textOutputElement.className = '';
+  textOutputElement.classList.add('body-' + DEFAULT_VALUES.fontFamily);
+  console.log("Loaded font family:", DEFAULT_VALUES.FontFamily);
   
   // Then try to load from localStorage
   try {
@@ -86,8 +88,8 @@ function initializeSettings() {
     const storedFontFamily = localStorage.getItem('fontFamily');
     if (storedFontFamily) {
       fontFamilySelector.value = storedFontFamily;
-      document.body.className = '';
-      document.body.classList.add('body-' + storedFontFamily);
+      textOutputElement.className = '';
+      textOutputElement.classList.add('body-' + storedFontFamily);
       console.log("Loaded font family:", storedFontFamily);
     }
   } catch (e) {
@@ -133,13 +135,14 @@ function setupEventListeners() {
     console.log("User typed in the text input box.");
   });
   
-  // Font family selector
-  fontFamilySelector.addEventListener('change', function() {
-    if (this.value) {
-      document.body.className = '';
-      document.body.classList.add('body-' + this.value);
-    }
-    localStorage.setItem('fontFamily', this.value);
+    // Font family selector
+fontFamilySelector.addEventListener('change', function() {
+  if (this.value) {
+    textOutputElement.className = '';
+    textOutputElement.classList.add('body-' + this.value);
+    console.log("Loaded font family:", this.value);
+  }
+  localStorage.setItem('fontFamily', this.value);
     
     // Prepare the first chunk
     let text = textInput.value;
