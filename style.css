@@ -1,32 +1,79 @@
+html {
+  scroll-behavior: smooth;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 :root {
-  /* Light mode (default) */
+  /* Light mode */
   --background-color: #fff;
   --text-color: #333;
+  /* General */
+  --light: #fff;
+  --dark: #352E2A;
+  /* Coolers Palette */
+  --atomic-tangerine: #F78F4C;
+  --sunset: #EFC388;
+  --peach-yellow: #FBDEA3;
+  --ash-gray: #A5C7C1;
+  --van-dyke: #352E2A;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     /* Dark mode */
     --background-color: #333;
-    --text-color: #cbcbcb;
+    --text-color: #ebebeb;
   }
 }
 
+/* ----- ----- ----- ----- ----- */
 /* Macro Styles */
 body {
   background-color: var(--background-color);
   color: var(--text-color);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
 }
 
-h1,
-h2,
+h1 {
+  font-size: 2em;
+  font-weight: bold;
+  margin: 0 auto .5em;
+}
+
+h2 {
+  font-size: 1.8em;
+  font-weight: bold;
+  margin: 0 auto .5em;
+}
+
 h3 {
-  margin-top: 1.7em;
-  margin-bottom: .5em;
+  font-size: 1.5em;
+  margin: 0 auto .5em;
+}
+
+p {
+  font-size: 16px;
+  line-height: 1.2;
+  margin: 0 auto .8em;
+}
+
+.container h2 {
+  width: 100%;
 }
 
 a {
-  color: orangered;
+  color: var(--atomic-tangerine);
+}
+
+h1.title a.navlink {
+  color: var(--dark);
+  text-decoration: none;
 }
 
 body {
@@ -34,18 +81,62 @@ body {
   margin: 0;
 }
 
+hr {
+  width: 60%;
+  margin: 20px auto;
+}
+
+.color-aqua {
+  background-color: mediumaquamarine;
+  color: var(--dark);
+}
+
+.color-yellow {
+  background-color: var(--peach-yellow);
+  color: var(--dark);
+}
+
+.color-gray {
+  background-color: var(--ash-gray);
+  color: var(--dark);
+}
+.color-brown {
+  background-color: var(--van-dyke);
+  color: var(--light);
+}
+
+.navigation {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1em;
+  margin: 10px;
+}
+
+.center {
+  width: 100%;
+  text-align: center;
+}
+
+
+
+
 /* Dark Mode Light Mode */
 body.light-theme {
   background-color: #fff;
   color: #333;
 }
+
 body.dark-theme {
   background-color: #333;
   color: #cbcbcb;
 }
+
 body.light-theme a {
-  color: orangered;
+  color: var(--atomic-tangerine);
 }
+
 body.dark-theme a {
   color: chocolate;
 }
@@ -55,6 +146,24 @@ div.lightdarkselector {
   top: 1em;
   left: 1em;
 }
+
+.dark {
+  color: var(--dark);
+}
+
+.light {
+  color: var(--light);
+}
+
+
+
+/* ----- ----- ----- ----- ----- */
+/* ----- ----- ----- ----- ----- */
+/* ----- ----- ----- ----- ----- */
+/* ----- ----- ----- ----- ----- */
+/* ----- ----- ----- ----- ----- */
+
+/* Speed Reader Styles */
 
 /* Font Selector */
 .body-Dyslexia {
@@ -81,7 +190,7 @@ div.lightdarkselector {
 .mainContainer {
   max-width: 1000px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 20px 5px;
 }
 
 h1.title {
@@ -100,9 +209,11 @@ img.icon {
   transition: width 0.5s ease-in-out;
 }
 
+/*
 img.icon:hover {
   width: 400px;
 }
+*/
 
 .inputContainer {
   max-width: 600px;
@@ -124,6 +235,7 @@ textarea {
 input[type="range"] {
   width: 130px;
 }
+
 select {
   width: 130px;
   margin-right: 5px;
@@ -135,29 +247,6 @@ label {
   position: absolute;
 }
 
-/* Tooltip container */
-.tooltip {
-  position: relative;
-  display: inline-block;
-  border-bottom: 1px dotted black;
-  margin: 0 5px;
-}
-.tooltip .tooltiptext {
-  visibility: hidden;
-  width: 180px;
-  background-color: darkslategrey;
-  color: ivory;
-  text-align: center;
-  padding: 5px;
-  border-radius: 8px;
-  position: absolute;
-  z-index: 1;
-}
-.tooltip:hover .tooltiptext {
-  visibility: visible;
-}
-/* END of tooltip */
-
 
 div.inputblock {
   margin: 10px 0;
@@ -167,13 +256,18 @@ button {
   display: block;
   margin: 10px auto;
   padding: 0.8em 2.2em;
-  background: linear-gradient(45deg, #f0974f, #9db1ae);
+  background: linear-gradient(45deg, var(--atomic-tangerine), orangered);
   border-radius: 8px;
   border: none;
   color: white;
   font-weight: bold;
   font-size: 1.3em;
   line-height: 1.3em;
+  cursor: pointer;
+}
+
+a.buttonLink {
+  text-decoration: none;
 }
 
 #textOutput {
@@ -203,6 +297,11 @@ button {
   flex-wrap: wrap;
   gap: 1em;
   justify-content: center;
+
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
 a.extlinks {
@@ -244,17 +343,6 @@ img.linklogo {
   text-align: center;
 }
 
-div.about {
-  max-width: 600px;
-  border: 1px solid #eee;
-  border-radius: 8px;
-  padding: 0 10px 10px;
-  text-align: left;
-}
-div.about p {
-  margin: .5em 0
-}
-
 
 @media only screen and (max-width: 480px) {
   #mainContainer {
@@ -282,19 +370,6 @@ div.about p {
     position: absolute;
   }
 
-  button {
-    display: block;
-    margin: 10px auto;
-    padding: 0.8em 2.2em;
-    background: linear-gradient(45deg, #f0974f, #9db1ae);
-    border-radius: 8px;
-    border: none;
-    color: white;
-    font-weight: bold;
-    font-size: 1.3em;
-    line-height: 1.3em;
-  }
-
   #textOutput {
     width: auto;
     min-height: 200px;
@@ -310,4 +385,395 @@ div.about p {
     text-align: center;
     line-height: 1.2em;
   }
+}
+
+
+
+
+
+/* ----- ----- ----- ----- ----- */
+/* ----- ----- ----- ----- ----- */
+/* ----- ----- ----- ----- ----- */
+/* ----- ----- ----- ----- ----- */
+/* ----- ----- ----- ----- ----- */
+
+/* Info Page Styles */
+/* Donate Page */
+
+div.donateContainer p {
+  font-size: 1.1rem;
+}
+
+.hero {
+  background: linear-gradient(to right, var(--ash-gray), #3E5C76);
+  color: var(--light);
+  text-align: center;
+  padding: 2.5em 0;
+}
+
+.hero p {
+  font-size: 1.4rem;
+  max-width: 800px;
+}
+
+section {
+  padding: 60px 0;
+}
+
+h2 {
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  position: relative;
+  padding-bottom: 15px;
+}
+
+h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 80px;
+  height: 4px;
+  background-color: var(--atomic-tangerine);
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  width: 100%;
+}
+
+.feature-item {
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  transition: transform 0.3s ease;
+}
+
+.feature-item:hover {
+  transform: translateY(-5px);
+}
+
+.feature-item img {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 15px;
+}
+
+.feature-item h3 {
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 25px;
+  margin-top: 30px;
+}
+
+.feature-item {
+  text-align: center;
+  padding: 20px;
+}
+
+.feature-icon {
+  font-size: 2.5rem;
+  color: var(--atomic-tangerine);
+  margin-bottom: 15px;
+}
+
+div.testimonial-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1em;
+  flex-wrap: wrap;
+}
+
+.testimonial {
+  padding: 30px;
+  border-radius: 8px;
+  margin: 1em 0;
+  position: relative;
+}
+
+.testimonial::before {
+  content: '"';
+  font-size: 5rem;
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.testimonial-author {
+  font-style: italic;
+  text-align: right;
+  margin-top: 20px;
+}
+
+.stats-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  text-align: center;
+}
+
+.stat-item {
+  padding: 20px;
+  width: 230px;
+}
+
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--atomic-tangerine);
+  margin-bottom: 10px;
+}
+
+.cta-container {
+  text-align: left;
+  margin: 10px auto;
+}
+
+.cta-button {
+  display: inline-block;
+  padding: 15px 30px;
+  font-size: 1.2rem;
+  background-color: var(--atomic-tangerine);
+  color: var(--ash-gray);
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  margin: 10px;
+}
+
+.cta-button:hover {
+  background-color: #E85A29;
+}
+
+.cta-button.secondary {
+  background-color: transparent;
+  border: 2px solid var(--atomic-tangerine);
+  color: var(--atomic-tangerine);
+}
+
+.cta-button.secondary:hover {
+  background-color: rgba(255, 107, 53, 0.1);
+}
+
+ul {
+  list-style-type: none;
+  margin-bottom: 20px;
+}
+
+ul li {
+  position: relative;
+  padding-left: 25px;
+  margin-bottom: 6px;
+  font-size: inherit;
+  line-height: 1.2;
+}
+
+ul li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 4px;
+  width: .7em;
+  height: .7em;
+  background-color: var(--atomic-tangerine);
+  border-radius: 50%;
+  margin-left: 2px;
+}
+
+strong {
+  font-weight: bold;
+}
+
+
+/* ----- ----- ----- ----- ----- */
+/* ----- ----- ----- ----- ----- */
+/* ----- ----- ----- ----- ----- */
+/* ----- ----- ----- ----- ----- */
+/* ----- ----- ----- ----- ----- */
+/* Links Section */
+
+div.links {
+  display: flex;
+  width: 200px;
+  margin: 20px auto;
+  justify-content: center;
+  flex-wrap: wrap;
+  flex-direction: column;
+  list-style-type: none;
+}
+
+div.links a {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+
+
+
+/* ----- ----- ----- ----- ----- */
+/* ----- ----- ----- ----- ----- */
+/* ----- ----- ----- ----- ----- */
+/* ----- ----- ----- ----- ----- */
+/* ----- ----- ----- ----- ----- */
+/* Mailchimp Form Styling */
+
+#mc_embed_shell {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 30px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+#mc_embed_signup {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#mc_embed_signup form {
+  padding: 0;
+}
+
+#mc_embed_signup h2 {
+  font-size: 2rem;
+  color: #2E4057;
+  margin-bottom: 20px;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+#mc_embed_signup h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background-color: #FF6B35;
+}
+
+.indicates-required {
+  text-align: right;
+  margin-bottom: 0;
+  font-size: 0.9rem;
+  color: #777;
+}
+
+.asterisk {
+  color: #FF6B35;
+  font-weight: bold;
+}
+
+.mc-field-group {
+  margin-bottom: 20px;
+}
+
+.mc-field-group label {
+  display: contents;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #2E4057;
+}
+
+.mc-field-group input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.mc-field-group input:focus {
+  border-color: #FF6B35;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
+}
+
+#mce-responses {
+  margin-top: 15px;
+}
+
+.response {
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+}
+
+#mce-error-response {
+  background-color: #ffebee;
+  color: #c62828;
+  border: 1px solid #ffcdd2;
+}
+
+#mce-success-response {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #c8e6c9;
+}
+
+#mc-embedded-subscribe {
+  background-color: #FF6B35;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#mc-embedded-subscribe:hover {
+  background-color: #E85A29;
+}
+
+.optionalParent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .foot {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .foot p {
+    margin-top: 15px !important;
+  }
+
+  #mc_embed_shell {
+    padding: 20px;
+  }
+}
+
+/* Make the Mailchimp badge less prominent */
+.refferal_badge {
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.refferal_badge:hover {
+  opacity: 1;
 }

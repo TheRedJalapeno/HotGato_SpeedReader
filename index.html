@@ -9,12 +9,17 @@
   <script src="core.js" defer></script>
   <script src="darkmode.js" defer></script>
   <link rel="stylesheet" href="style.css">
-  <meta seom="description" content="HotGato Speed Reader is a web-based speed reading tool that allows you to read text at adjustable speeds, with customizable font sizes and styles.">
+  <meta seom="description"
+    content="HotGato Speed Reader is a web-based speed reading tool that allows you to read text at adjustable speeds, with customizable font sizes and styles.">
   <meta name="keywords" content="speed reading, text reader, adjustable speed, font size, font style, web-based reader">
+  <meta name="author" content="ZingLab LLC">
+  <meta name="robots" content="index, follow">
+  <meta name="googlebot" content="index, follow">
 </head>
 
 <body class="dark-theme">
-  <div id="lightdarktoggle" class="lightdarkselector" title="Toggle light mode and dark mode"><img src="lightbulb_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg"></div>
+  <div id="lightdarktoggle" class="lightdarkselector" title="Toggle light mode and dark mode"><img
+      src="lightbulb_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg"></div>
   <div class="mainContainer">
     <img class="icon" src="hotgato_400.jpg">
     <h1 class="title">HotGato Speed&nbsp;Reader</h1>
@@ -102,8 +107,8 @@
             href="https://github.com/TheRedJalapeno/HotGato_SpeedReader">HotGato on Github</a></li>
       </ul>
     </div>
+    <!-- External Links -->
     <div class="inputContainer">
-      <!-- External Links -->
       <h3>Links</h3>
       <div class="container">
 
@@ -112,14 +117,14 @@
           target="_blank">
           <div class="sidebyside">
             <img class="linklogo" src="chrome.svg">
-            <p>Chrome Extension</p>
+            <p>Chrome<br>Extension</p>
           </div>
         </a>
 
         <a class="extlinks" href="https://addons.mozilla.org/en-US/firefox/addon/hotgato-speed-reader/" target="_blank">
           <div class="sidebyside">
             <img class="linklogo" src="firefox.svg">
-            <p>Firefox Add-On</p>
+            <p>Firefox<br>Add-On</p>
           </div>
         </a>
 
@@ -133,7 +138,7 @@
         <a class="extlinks" href="https://www.amazon.com/s?k=Robert-Willnow" target="_blank">
           <div class="sidebyside">
             <img class="linklogo" src="auto_stories_36dp_F19E39_FILL0_wght700_GRAD200_opsz40.svg">
-            <p>Read my books</p>
+            <p>Read<br>My Books</p>
           </div>
         </a>
       </div>
@@ -141,22 +146,24 @@
   </div>
 
   <!-- Footer -->
-  <div id="footer" class="container footer">
-
-    <div class="externalWidget">
-      <a href="https://www.producthunt.com/posts/hotgato-speed-reader?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-hotgato&#0045;speed&#0045;reader"
-        target="_blank"><img
-          src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=590715&theme=light"
-          alt="HotGato&#0032;Speed&#0032;Reader - The&#0032;best&#0032;speed&#0032;reader&#0032;app&#0032;and&#0032;extension&#0032;around | Product Hunt"
-          style="width: 250px; height: 54px;" width="250" height="54" /></a>
+  <footer id="footer" class="footer">
+    <div class="links">
+      <h4>Links</h4>
+      <li><a href="https://zinglab.com">Home</a></li>
+      <li><a href="https://zinglab.com/donate">Donate</a></li>
+      <li><a href="https://zinglab.com/enterprise">Enterprise</a></li>
     </div>
+    <hr>
     <div class="copyright">
       <p>Reach out by email to <span>HotGato@</span>ZingLab.com</p>
-      <p>Copyright <span id="year"></span>, <a href="https://zinglab.com/" target="_blank">ZingLab LLC</a></p>
-      <p><a href="https://zinglab.com/" target="_blank"><img src="experiment_36dp_F19E39_FILL0_wght400_GRAD0_opsz40.svg"
-            style="height:24px;width:24px;"></a></p>
+      <p>Copyright &copy;
+        <script>document.write(new Date().getFullYear())</script>, <a href="https://zinglab.com/?utm_source=zinglab"
+          target="_blank">ZingLab LLC</a>
+      </p>
+      <p><a href="https://zinglab.com/?utm_source=zinglab" target="_blank"><img
+            src="experiment_36dp_F19E39_FILL0_wght400_GRAD0_opsz40.svg" style="height:24px;width:24px;"></a></p>
     </div>
-  </div>
+  </footer>
 
 
   <deleteThisForOfflineMode>
@@ -170,11 +177,6 @@
       gtag('config', 'G-2SDKE8KJHN');
     </script>
   </deleteThisForOfflineMode>
-
-<script>
-// Set the current year in the footer
-  document.getElementById("year").innerHTML = new Date().getFullYear();
-</script>
 
 
 </body>
