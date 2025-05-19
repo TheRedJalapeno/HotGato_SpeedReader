@@ -266,6 +266,15 @@ button {
   cursor: pointer;
 }
 
+button.buttonOrange {
+  background: linear-gradient(45deg, var(--atomic-tangerine), orangered);
+}
+
+button.buttonBlue {
+  background: linear-gradient(45deg, var(--light), #2A4B7C);
+}
+
+
 a.buttonLink {
   text-decoration: none;
 }
@@ -603,7 +612,7 @@ strong {
 /* Links Section */
 
 div.links {
-  display: flex;
+  display: inline-flex;
   width: 200px;
   margin: 20px auto;
   justify-content: center;
@@ -613,8 +622,8 @@ div.links {
 }
 
 div.links a {
-  font-size: 1.2em;
-  font-weight: bold;
+  font-size: 1em;
+  font-weight: normal;
 }
 
 
@@ -776,4 +785,16 @@ div.links a {
 
 .refferal_badge:hover {
   opacity: 1;
+}
+
+/* ----- ----- ----- ----- ----- */
+/* ----- ----- ----- ----- ----- */
+/* ----- ----- ----- ----- ----- */
+/* ----- ----- ----- ----- ----- */
+/* ----- ----- ----- ----- ----- */
+/* Stripe Styles */
+
+div.stripe-pricing-table {
+width: 100%;
+display: block;
 }
