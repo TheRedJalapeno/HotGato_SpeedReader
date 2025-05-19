@@ -86,6 +86,10 @@ hr {
   margin: 20px auto;
 }
 
+ol, ul {
+  margin-left: 20px;
+}
+
 .color-aqua {
   background-color: mediumaquamarine;
   color: var(--dark);
@@ -343,6 +347,7 @@ img.linklogo {
   padding: 20px 20px 50px;
   background: #222;
   color: #ddd;
+  text-align: center;
 }
 
 .footer div {
@@ -609,12 +614,15 @@ strong {
 /* ----- ----- ----- ----- ----- */
 /* ----- ----- ----- ----- ----- */
 /* ----- ----- ----- ----- ----- */
-/* Links Section */
+/* Footer Links Section */
+
+div.footerLinks {
+  margin: 20px auto;
+}
 
 div.links {
   display: inline-flex;
-  width: 200px;
-  margin: 20px auto;
+  width: 300px;
   justify-content: center;
   flex-wrap: wrap;
   flex-direction: column;
@@ -624,6 +632,8 @@ div.links {
 div.links a {
   font-size: 1em;
   font-weight: normal;
+  text-decoration: none;
+  line-height: 1.8em;
 }
 
 
