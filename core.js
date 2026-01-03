@@ -269,6 +269,15 @@ function protectSpecialDots(text) {
   text = protectAbbreviations(text);
   return text;
 }
+
+// Returns true if word ends with sentence-ending punctuation (not acronym/abbreviation)
+function endsWithSentencePunctuation(word) {
+  if (!/[.!?]$/.test(word)) return false;
+  if (/^([A-Z]\.)+$/.test(word)) return false;  // Acronym like U.K.
+  const abbrevPattern = new RegExp(`^(${ABBREVIATIONS.join('|')})\\.$`, 'i');
+  if (abbrevPattern.test(word)) return false;   // Abbreviation like Mr.
+  return true;
+}
 // END of acronym and abbreviation protection functions
 //-------------------------------------
 
@@ -318,10 +327,10 @@ function getChunksFromSentences(sentences, chunkSize) {
   while (i < allWords.length) {
     let chunkEnd = i + chunkSize;
 
-    if (/[.!?]$/.test(allWords[chunkEnd - 1])) {
+    if (endsWithSentencePunctuation(allWords[chunkEnd - 1])) {
       chunkEnd = chunkEnd;
     } else {
-      let nextPunctuationIndex = allWords.slice(i).findIndex(word => /[.!?]$/.test(word));
+      let nextPunctuationIndex = allWords.slice(i).findIndex(word => endsWithSentencePunctuation(word));
       if (nextPunctuationIndex !== -1 && nextPunctuationIndex < chunkSize) {
         chunkEnd = i + nextPunctuationIndex + 1;
       }
@@ -366,11 +375,13 @@ function startReading() {
     // Compute delay based on chunk size and selected WPM
     let delay = (chunk.length / parseInt(speedSelector.value)) * 60000;
 
-    // This regex matches sentence-ending punctuation, numbers, URLs, and paragraph breaks
-    const specialCharacterRegex = /(\d+(\.\d+)?|[.,!?'"`\n]|https?:\/\/[^\s]+|\s{2,})/g;
+    // Check for real sentence-ending punctuation (excluding acronyms/abbreviations)
+    const words = chunkText.split(/\s+/);
+    const hasRealPunctuation = words.some(word => endsWithSentencePunctuation(word)) ||
+                               /(\d+(\.\d+)?|[,!?'"`\n]|https?:\/\/[^\s]+|\s{2,})/.test(chunkText);
 
-    // If the chunk contains a special character, add an extra delay
-    if (specialCharacterRegex.test(chunkText)) {
+    // If the chunk contains special characters, add an extra delay
+    if (hasRealPunctuation) {
       delay += 60000 / parseInt(speedSelector.value) * parseFloat(pauseSpeedSelector.value); // add a delay relative to reading speed
     }
 
