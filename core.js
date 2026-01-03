@@ -270,12 +270,26 @@ function protectSpecialDots(text) {
   return text;
 }
 
-// Returns true if word ends with sentence-ending punctuation (not acronym/abbreviation)
+// Returns true if word ends with real sentence-ending punctuation
+// Protected dots (PROTECTED_DOT) are NOT sentence endings
+// Real dots at end of acronyms (like "U.S." at end of sentence) ARE sentence endings
 function endsWithSentencePunctuation(word) {
   if (!/[.!?]$/.test(word)) return false;
-  if (/^([A-Z]\.)+$/.test(word)) return false;  // Acronym like U.K.
+  // If word contains PROTECTED_DOT, it's an acronym/abbreviation
+  // but might still end with real punctuation (e.g., "U￿S." at end of sentence)
+  // The key is: does it end with a REAL dot (not protected)?
+  // If last char is . and second-to-last is not PROTECTED_DOT, it's a real ending
+  if (word.includes(PROTECTED_DOT)) {
+    // Check if it ends with real punctuation (not just protected dot pattern)
+    // "U￿K￿" → no real ending (ends with protected dot pattern)
+    // "U￿S." → real ending (ends with real dot)
+    const lastChar = word.slice(-1);
+    const beforeLast = word.slice(-2, -1);
+    return lastChar === '.' && beforeLast !== PROTECTED_DOT;
+  }
+  // No protected dots, check for abbreviations
   const abbrevPattern = new RegExp(`^(${ABBREVIATIONS.join('|')})\\.$`, 'i');
-  if (abbrevPattern.test(word)) return false;   // Abbreviation like Mr.
+  if (abbrevPattern.test(word)) return false;
   return true;
 }
 // END of acronym and abbreviation protection functions
@@ -307,8 +321,8 @@ function splitIntoSentences(text) {
     }
   }
 
-  // Restore protected dots before returning
-  return sentences.map(s => restoreProtectedDots(s));
+  // Keep protected dots for now - will restore when displaying
+  return sentences;
 }
 // END of splitIntoSentences function
 //-------------------------------------
@@ -385,12 +399,15 @@ function startReading() {
       delay += 60000 / parseInt(speedSelector.value) * parseFloat(pauseSpeedSelector.value); // add a delay relative to reading speed
     }
 
+    // Restore protected dots for display
+    const displayText = restoreProtectedDots(chunkText);
+
     // If the selected font family is "Bionic", highlight the first two letters
     if (fontFamilySelector.value === 'Bionic') {
       displayBionicText(chunk);
     } else {
       // Standard display
-      textOutput.textContent = chunkText;
+      textOutput.textContent = displayText;
     }
 
     if (isReading) {
@@ -416,8 +433,8 @@ function displayBionicText(chunk) {
   const container = document.createElement('div');
   container.style.whiteSpace = 'pre-wrap'; // Preserve spaces
   
-  // Process the chunk word by word
-  const text = chunk.join(' ');
+  // Process the chunk word by word (restore protected dots for display)
+  const text = restoreProtectedDots(chunk.join(' '));
   const words = text.split(/\s+/);
   
   words.forEach((word, index) => {
