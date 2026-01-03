@@ -223,8 +223,60 @@ document.addEventListener('DOMContentLoaded', (event) => {
 });
 
 //-------------------------------------
+// START of acronym and abbreviation protection functions
+const PROTECTED_DOT = '\uFFFF'; // Placeholder character for protected dots
+
+// Common abbreviations that shouldn't end a sentence
+const ABBREVIATIONS = [
+  'Mr', 'Mrs', 'Ms', 'Dr', 'Prof', 'Sr', 'Jr',
+  'vs', 'etc', 'approx', 'Inc', 'Ltd', 'Co',
+  'Gen', 'Col', 'Lt', 'Sgt', 'Rev', 'Hon'
+];
+const ABBREV_REGEX = new RegExp(`\\b(${ABBREVIATIONS.join('|')})\\.`, 'gi');
+
+// Protects acronyms like U.K., U.S.A., N.A.T.O.
+// If followed by lowercase letter → protect all dots (not end of sentence)
+// Otherwise → protect all dots except last (is end of sentence)
+function protectAcronyms(text) {
+  return text.replace(/\b([A-Z]\.){2,}/g, (match, _, offset) => {
+    const afterMatch = text.slice(offset + match.length);
+
+    // If followed by space + lowercase → protect ALL dots (not end of sentence)
+    if (/^\s+[a-z]/.test(afterMatch)) {
+      return match.replace(/\./g, PROTECTED_DOT);
+    }
+
+    // Otherwise, protect all dots EXCEPT the last one (is end of sentence)
+    return match.slice(0, -1).replace(/\./g, PROTECTED_DOT) + '.';
+  });
+}
+
+// Protects common abbreviations like Mr., Dr., etc.
+function protectAbbreviations(text) {
+  return text.replace(ABBREV_REGEX, (match) => {
+    return match.slice(0, -1) + PROTECTED_DOT;
+  });
+}
+
+// Restores protected dots back to normal dots
+function restoreProtectedDots(text) {
+  return text.replace(new RegExp(PROTECTED_DOT, 'g'), '.');
+}
+
+// Combined protection function
+function protectSpecialDots(text) {
+  text = protectAcronyms(text);
+  text = protectAbbreviations(text);
+  return text;
+}
+// END of acronym and abbreviation protection functions
+//-------------------------------------
+
+//-------------------------------------
 // START of splitIntoSentences function
 function splitIntoSentences(text) {
+  // Protect acronyms and abbreviations before splitting
+  text = protectSpecialDots(text);
   // Replace multiple newlines with a single newline
   text = text.replace(/\n+/g, '\n');
   let splitParts = text.split(/(?<!\d)([.!?])(?!\d)(?=\s|$|\s?[A-Z]|$)|\n+/);
@@ -246,7 +298,8 @@ function splitIntoSentences(text) {
     }
   }
 
-  return sentences;
+  // Restore protected dots before returning
+  return sentences.map(s => restoreProtectedDots(s));
 }
 // END of splitIntoSentences function
 //-------------------------------------
