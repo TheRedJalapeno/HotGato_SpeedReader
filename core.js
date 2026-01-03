@@ -224,6 +224,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 //-------------------------------------
 // START of acronym and abbreviation protection functions
+// Note: Uses placeholder technique instead of lookbehind (like numbers in
+// splitIntoSentences) because acronym patterns have variable length which
+// JavaScript regex lookbehind doesn't support
 const PROTECTED_DOT = '\uFFFF'; // Placeholder character for protected dots
 
 // Common abbreviations that shouldn't end a sentence
