@@ -73,6 +73,7 @@ p {
 a {
   color: var(--atomic-tangerine);
   text-decoration: none;
+  cursor: pointer;
 }
 
 h1.title a.navlink {
@@ -284,7 +285,7 @@ button.buttonBlue {
 
 button.donate {
   padding: .4em .6em;
-  background: linear-gradient(45deg, green, aquamarine);
+  background: green;
 }
 
 
@@ -331,25 +332,25 @@ a.extlinks {
 }
 
 div.sidebyside {
-  display: inline-block;
+  display: flex;
   margin: auto;
   border: 1px solid gray;
   border-radius: 8px;
+  padding: 5px 15px;
 }
 
 img.linklogo {
   width: 48px;
-  height: auto;
+  height: 48px;
   display: block;
-  padding-top: 1em;
   margin: auto;
+  filter: drop-shadow(0 0 .3em chocolate);
 }
 
 .sidebyside p {
-  display: block;
-  margin: 1em;
+  display: flex;
+  margin: 1em 0 1em 1em;
   text-align: center;
-  text-decoration: underline;
 }
 
 #footer {
