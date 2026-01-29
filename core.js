@@ -7,6 +7,7 @@ let fontSizeSelector;
 let fontFamilySelector;
 let startPauseButton;
 let textOutput;
+let fileInput;
 let reading;
 let isReading = false;
 var isPaused = false;
@@ -175,6 +176,26 @@ fontFamilySelector.addEventListener('change', function() {
   });
 }
 
+// Load default text file on page load
+async function loadDefaultText() {
+  try {
+    const response = await fetch('kolnari_prologue_chap1.txt');
+    if (!response.ok) {
+      console.log('Default text file not found, textarea will remain empty');
+      return;
+    }
+    const text = await response.text();
+    if (textInput && !textInput.value) {
+      textInput.value = text;
+      userInteracted = true; // Treat like user interaction to reset reading position
+      console.log('Loaded default text from kolnari_prologue_chap1.txt');
+    }
+  } catch (error) {
+    console.log('Could not load default text:', error);
+    // Silently fail - textarea will remain empty
+  }
+}
+
 document.addEventListener('DOMContentLoaded', (event) => {
   console.log("DOM fully loaded");
   
@@ -187,6 +208,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   fontFamilySelector = document.getElementById('fontFamily');
   startPauseButton = document.getElementById('startPause');
   textOutput = document.getElementById('textOutput');
+  fileInput = document.getElementById('fileInput');
   
   if (!textInput || !speedSelector || !pauseSpeedSelector || !chunkSelector || 
       !fontSizeSelector || !fontFamilySelector || !startPauseButton || !textOutput) {
@@ -197,6 +219,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
   // Initialize settings and set up event listeners
   initializeSettings();
   setupEventListeners();
+  
+  // Add file input event listener if element exists
+  if (fileInput) {
+    fileInput.addEventListener('change', handleFileUpload);
+  }
   
   // About box functionality
   var aboutTrigger = document.getElementById('about-trigger');
@@ -209,11 +236,16 @@ document.addEventListener('DOMContentLoaded', (event) => {
     };
   }
   
+  // Load default text file
+  loadDefaultText();
+  
   // Extension-specific code - Load extracted text
+  // Note: Chrome storage takes priority over default text
   if (typeof chrome !== 'undefined' && chrome.storage) {
     chrome.storage.local.get(['extractedText'], function(result) {
       if (result.extractedText) {
         textInput.value = result.extractedText;
+        userInteracted = true;
         console.log("Loaded extracted text from chrome storage");
       }
     });
@@ -283,6 +315,315 @@ function getChunksFromSentences(sentences, chunkSize) {
   return chunks;
 }
 // END of getChunksFromSentences function
+//-------------------------------------
+
+//-------------------------------------
+// START of file handling functions
+async function handleFileUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  
+  console.log("File selected:", file.name, "Type:", file.type);
+  
+  const extension = file.name.split('.').pop().toLowerCase();
+  let extractedText = '';
+  
+  try {
+    switch(extension) {
+      case 'txt':
+      case 'log':
+        extractedText = await readTextFile(file);
+        break;
+      case 'pdf':
+        extractedText = await readPDFFile(file);
+        break;
+      case 'docx':
+        extractedText = await readDocxFile(file);
+        break;
+      case 'epub':
+        extractedText = await readEpubFile(file);
+        break;
+      case 'rtf':
+        extractedText = await readRTFFile(file);
+        break;
+      case 'odt':
+        extractedText = await readODTFile(file);
+        break;
+      case 'html':
+      case 'htm':
+        extractedText = await readHTMLFile(file);
+        break;
+      case 'md':
+      case 'markdown':
+        extractedText = await readMarkdownFile(file);
+        break;
+      case 'doc':
+        alert('Legacy .doc files are not supported. Please convert to .docx format.');
+        return;
+      case 'gdoc':
+        alert('Google Docs cannot be uploaded directly. Please use File > Download > Plain Text (.txt) or Microsoft Word (.docx) from Google Docs, then upload the downloaded file.');
+        return;
+      default:
+        alert('Unsupported file format. Supported formats: txt, pdf, docx, epub, pages, rtf, odt, html, md');
+        return;
+    }
+    
+    if (extractedText) {
+      textInput.value = extractedText;
+      userInteracted = true;
+      console.log("Successfully loaded text from file");
+    }
+  } catch (error) {
+    console.error("Error reading file:", error);
+    alert('Error reading file: ' + error.message);
+  }
+}
+
+function readTextFile(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => resolve(e.target.result);
+    reader.onerror = (e) => reject(new Error('Failed to read text file'));
+    reader.readAsText(file);
+  });
+}
+
+async function readPDFFile(file) {
+  // Load PDF.js library if not already loaded
+  if (typeof pdfjsLib === 'undefined') {
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  }
+  
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      try {
+        const typedArray = new Uint8Array(e.target.result);
+        const pdf = await pdfjsLib.getDocument(typedArray).promise;
+        let fullText = '';
+        
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const page = await pdf.getPage(i);
+          const textContent = await page.getTextContent();
+          const pageText = textContent.items.map(item => item.str).join(' ');
+          fullText += pageText + '\n\n';
+        }
+        
+        resolve(fullText);
+      } catch (error) {
+        reject(new Error('Failed to parse PDF: ' + error.message));
+      }
+    };
+    reader.onerror = () => reject(new Error('Failed to read PDF file'));
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+async function readDocxFile(file) {
+  // Load mammoth.js library if not already loaded
+  if (typeof mammoth === 'undefined') {
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js');
+  }
+  
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      try {
+        const arrayBuffer = e.target.result;
+        const result = await mammoth.extractRawText({ arrayBuffer: arrayBuffer });
+        resolve(result.value);
+      } catch (error) {
+        reject(new Error('Failed to parse DOCX: ' + error.message));
+      }
+    };
+    reader.onerror = () => reject(new Error('Failed to read DOCX file'));
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+async function readEpubFile(file) {
+  // Load JSZip and basic EPUB parsing
+  if (typeof JSZip === 'undefined') {
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js');
+  }
+  
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      try {
+        const zip = await JSZip.loadAsync(e.target.result);
+        let fullText = '';
+        
+        // Find all HTML/XHTML files in the EPUB
+        const htmlFiles = Object.keys(zip.files).filter(filename => 
+          filename.match(/\.(html|xhtml|htm)$/i) && !filename.startsWith('__MACOSX')
+        );
+        
+        // Extract text from each HTML file
+        for (const filename of htmlFiles) {
+          const content = await zip.files[filename].async('string');
+          // Remove HTML tags and extract text
+          const tempDiv = document.createElement('div');
+          tempDiv.innerHTML = content;
+          fullText += tempDiv.textContent + '\n\n';
+        }
+        
+        resolve(fullText);
+      } catch (error) {
+        reject(new Error('Failed to parse EPUB: ' + error.message));
+      }
+    };
+    reader.onerror = () => reject(new Error('Failed to read EPUB file'));
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+async function readRTFFile(file) {
+  // RTF to HTML conversion
+  if (typeof RTFJS === 'undefined') {
+    await loadScript('https://cdn.jsdelivr.net/npm/rtf.js@3.0.8/rtf.min.js');
+  }
+  
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      try {
+        const arrayBuffer = e.target.result;
+        const doc = new RTFJS.Document(arrayBuffer);
+        const htmlElements = await doc.render();
+        
+        // Extract text from rendered HTML elements
+        let fullText = '';
+        htmlElements.forEach(element => {
+          if (element && element.textContent) {
+            fullText += element.textContent + '\n';
+          }
+        });
+        
+        resolve(fullText);
+      } catch (error) {
+        reject(new Error('Failed to parse RTF: ' + error.message));
+      }
+    };
+    reader.onerror = () => reject(new Error('Failed to read RTF file'));
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+async function readODTFile(file) {
+  // ODT files are ZIP archives containing XML
+  if (typeof JSZip === 'undefined') {
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js');
+  }
+  
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      try {
+        const zip = await JSZip.loadAsync(e.target.result);
+        
+        if (!zip.files['content.xml']) {
+          reject(new Error('Invalid ODT file: content.xml not found'));
+          return;
+        }
+        
+        const contentXml = await zip.files['content.xml'].async('string');
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(contentXml, 'text/xml');
+        
+        // Extract text from paragraphs
+        const paragraphs = xmlDoc.getElementsByTagName('text:p');
+        let fullText = '';
+        for (let i = 0; i < paragraphs.length; i++) {
+          fullText += paragraphs[i].textContent + '\n';
+        }
+        
+        resolve(fullText);
+      } catch (error) {
+        reject(new Error('Failed to parse ODT: ' + error.message));
+      }
+    };
+    reader.onerror = () => reject(new Error('Failed to read ODT file'));
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+async function readHTMLFile(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const htmlContent = e.target.result;
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = htmlContent;
+        
+        // Remove script and style tags
+        const scripts = tempDiv.getElementsByTagName('script');
+        const styles = tempDiv.getElementsByTagName('style');
+        
+        while (scripts.length > 0) {
+          scripts[0].parentNode.removeChild(scripts[0]);
+        }
+        while (styles.length > 0) {
+          styles[0].parentNode.removeChild(styles[0]);
+        }
+        
+        resolve(tempDiv.textContent);
+      } catch (error) {
+        reject(new Error('Failed to parse HTML: ' + error.message));
+      }
+    };
+    reader.onerror = () => reject(new Error('Failed to read HTML file'));
+    reader.readAsText(file);
+  });
+}
+
+async function readMarkdownFile(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        // For a speed reader, we can just read markdown as plain text
+        // Alternatively, we could strip markdown syntax
+        const text = e.target.result;
+        
+        // Optional: Remove markdown formatting for cleaner reading
+        let cleanText = text
+          // Remove headers (#, ##, etc.)
+          .replace(/^#{1,6}\s+/gm, '')
+          // Remove bold/italic (**text**, *text*, __text__, _text_)
+          .replace(/(\*\*|__)(.*?)\1/g, '$2')
+          .replace(/(\*|_)(.*?)\1/g, '$2')
+          // Remove links [text](url) -> text
+          .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+          // Remove inline code `code` -> code
+          .replace(/`([^`]+)`/g, '$1')
+          // Remove code blocks
+          .replace(/```[\s\S]*?```/g, '')
+          // Remove horizontal rules
+          .replace(/^[-*_]{3,}$/gm, '');
+        
+        resolve(cleanText);
+      } catch (error) {
+        reject(new Error('Failed to parse Markdown: ' + error.message));
+      }
+    };
+    reader.onerror = () => reject(new Error('Failed to read Markdown file'));
+    reader.readAsText(file);
+  });
+}
+
+function loadScript(url) {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = url;
+    script.onload = resolve;
+    script.onerror = () => reject(new Error(`Failed to load script: ${url}`));
+    document.head.appendChild(script);
+  });
+}
+// END of file handling functions
 //-------------------------------------
 
 //-------------------------------------

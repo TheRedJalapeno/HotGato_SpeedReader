@@ -404,8 +404,15 @@ img.linklogo {
   }
 }
 
+.file-upload-section label {
+  display: contents;
+}
 
-
+.file-help-text {
+  font-size: 0.75em;
+  color: #888;
+  margin: 5px 0 0 0;
+}
 
 
 /* ----- ----- ----- ----- ----- */
