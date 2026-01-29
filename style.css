@@ -1,3 +1,6 @@
+/* OpenDyslexic Font */
+@import url('https://fonts.cdnfonts.com/css/opendyslexic');
+
 html {
   scroll-behavior: smooth;
 }
@@ -171,7 +174,7 @@ div.lightdarkselector {
 
 /* Font Selector */
 .body-Dyslexia {
-  font-family: 'Comic Sans MS', cursive;
+  font-family: 'OpenDyslexic', 'Comic Sans MS', cursive;
 }
 
 .body-Bionic {
