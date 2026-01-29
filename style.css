@@ -72,6 +72,7 @@ p {
 
 a {
   color: var(--atomic-tangerine);
+  text-decoration: none;
 }
 
 h1.title a.navlink {
@@ -279,6 +280,11 @@ button.buttonOrange {
 
 button.buttonBlue {
   background: linear-gradient(45deg, var(--light), #2A4B7C);
+}
+
+button.donate {
+  padding: .4em .6em;
+  background: linear-gradient(45deg, green, aquamarine);
 }
 
 
