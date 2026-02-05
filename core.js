@@ -255,8 +255,86 @@ document.addEventListener('DOMContentLoaded', (event) => {
 });
 
 //-------------------------------------
+// START of acronym and abbreviation protection functions
+// Note: Uses placeholder technique instead of lookbehind (like numbers in
+// splitIntoSentences) because acronym patterns have variable length which
+// JavaScript regex lookbehind doesn't support
+const PROTECTED_DOT = '\uFFFF'; // Placeholder character for protected dots
+
+// Common abbreviations that shouldn't end a sentence
+const ABBREVIATIONS = [
+  'Mr', 'Mrs', 'Ms', 'Dr', 'Prof', 'Sr', 'Jr',
+  'vs', 'etc', 'approx', 'Inc', 'Ltd', 'Co',
+  'Gen', 'Col', 'Lt', 'Sgt', 'Rev', 'Hon'
+];
+const ABBREV_REGEX = new RegExp(`\\b(${ABBREVIATIONS.join('|')})\\.`, 'gi');
+
+// Protects acronyms like U.K., U.S.A., N.A.T.O.
+// If followed by lowercase letter → protect all dots (not end of sentence)
+// Otherwise → protect all dots except last (is end of sentence)
+function protectAcronyms(text) {
+  return text.replace(/\b([A-Z]\.){2,}/g, (match, _, offset) => {
+    const afterMatch = text.slice(offset + match.length);
+
+    // If followed by space + lowercase → protect ALL dots (not end of sentence)
+    if (/^\s+[a-z]/.test(afterMatch)) {
+      return match.replace(/\./g, PROTECTED_DOT);
+    }
+
+    // Otherwise, protect all dots EXCEPT the last one (is end of sentence)
+    return match.slice(0, -1).replace(/\./g, PROTECTED_DOT) + '.';
+  });
+}
+
+// Protects common abbreviations like Mr., Dr., etc.
+function protectAbbreviations(text) {
+  return text.replace(ABBREV_REGEX, (match) => {
+    return match.slice(0, -1) + PROTECTED_DOT;
+  });
+}
+
+// Restores protected dots back to normal dots
+function restoreProtectedDots(text) {
+  return text.replace(new RegExp(PROTECTED_DOT, 'g'), '.');
+}
+
+// Combined protection function
+function protectSpecialDots(text) {
+  text = protectAcronyms(text);
+  text = protectAbbreviations(text);
+  return text;
+}
+
+// Returns true if word ends with real sentence-ending punctuation
+// Protected dots (PROTECTED_DOT) are NOT sentence endings
+// Real dots at end of acronyms (like "U.S." at end of sentence) ARE sentence endings
+function endsWithSentencePunctuation(word) {
+  if (!/[.!?]$/.test(word)) return false;
+  // If word contains PROTECTED_DOT, it's an acronym/abbreviation
+  // but might still end with real punctuation (e.g., "U￿S." at end of sentence)
+  // The key is: does it end with a REAL dot (not protected)?
+  // If last char is . and second-to-last is not PROTECTED_DOT, it's a real ending
+  if (word.includes(PROTECTED_DOT)) {
+    // Check if it ends with real punctuation (not just protected dot pattern)
+    // "U￿K￿" → no real ending (ends with protected dot pattern)
+    // "U￿S." → real ending (ends with real dot)
+    const lastChar = word.slice(-1);
+    const beforeLast = word.slice(-2, -1);
+    return lastChar === '.' && beforeLast !== PROTECTED_DOT;
+  }
+  // No protected dots, check for abbreviations
+  const abbrevPattern = new RegExp(`^(${ABBREVIATIONS.join('|')})\\.$`, 'i');
+  if (abbrevPattern.test(word)) return false;
+  return true;
+}
+// END of acronym and abbreviation protection functions
+//-------------------------------------
+
+//-------------------------------------
 // START of splitIntoSentences function
 function splitIntoSentences(text) {
+  // Protect acronyms and abbreviations before splitting
+  text = protectSpecialDots(text);
   // Replace multiple newlines with a single newline
   text = text.replace(/\n+/g, '\n');
   let splitParts = text.split(/(?<!\d)([.!?])(?!\d)(?=\s|$|\s?[A-Z]|$)|\n+/);
@@ -278,6 +356,7 @@ function splitIntoSentences(text) {
     }
   }
 
+  // Keep protected dots for now - will restore when displaying
   return sentences;
 }
 // END of splitIntoSentences function
@@ -297,10 +376,10 @@ function getChunksFromSentences(sentences, chunkSize) {
   while (i < allWords.length) {
     let chunkEnd = i + chunkSize;
 
-    if (/[.!?]$/.test(allWords[chunkEnd - 1])) {
+    if (endsWithSentencePunctuation(allWords[chunkEnd - 1])) {
       chunkEnd = chunkEnd;
     } else {
-      let nextPunctuationIndex = allWords.slice(i).findIndex(word => /[.!?]$/.test(word));
+      let nextPunctuationIndex = allWords.slice(i).findIndex(word => endsWithSentencePunctuation(word));
       if (nextPunctuationIndex !== -1 && nextPunctuationIndex < chunkSize) {
         chunkEnd = i + nextPunctuationIndex + 1;
       }
@@ -654,20 +733,25 @@ function startReading() {
     // Compute delay based on chunk size and selected WPM
     let delay = (chunk.length / parseInt(speedSelector.value)) * 60000;
 
-    // This regex matches sentence-ending punctuation, numbers, URLs, and paragraph breaks
-    const specialCharacterRegex = /(\d+(\.\d+)?|[.,!?'"`\n]|https?:\/\/[^\s]+|\s{2,})/g;
+    // Check for real sentence-ending punctuation (excluding acronyms/abbreviations)
+    const words = chunkText.split(/\s+/);
+    const hasRealPunctuation = words.some(word => endsWithSentencePunctuation(word)) ||
+                               /(\d+(\.\d+)?|[,!?'"`\n]|https?:\/\/[^\s]+|\s{2,})/.test(chunkText);
 
-    // If the chunk contains a special character, add an extra delay
-    if (specialCharacterRegex.test(chunkText)) {
+    // If the chunk contains special characters, add an extra delay
+    if (hasRealPunctuation) {
       delay += 60000 / parseInt(speedSelector.value) * parseFloat(pauseSpeedSelector.value); // add a delay relative to reading speed
     }
+
+    // Restore protected dots for display
+    const displayText = restoreProtectedDots(chunkText);
 
     // If the selected font family is "Bionic", highlight the first two letters
     if (fontFamilySelector.value === 'Bionic') {
       displayBionicText(chunk);
     } else {
       // Standard display
-      textOutput.textContent = chunkText;
+      textOutput.textContent = displayText;
     }
 
     if (isReading) {
@@ -693,8 +777,8 @@ function displayBionicText(chunk) {
   const container = document.createElement('div');
   container.style.whiteSpace = 'pre-wrap'; // Preserve spaces
   
-  // Process the chunk word by word
-  const text = chunk.join(' ');
+  // Process the chunk word by word (restore protected dots for display)
+  const text = restoreProtectedDots(chunk.join(' '));
   const words = text.split(/\s+/);
   
   words.forEach((word, index) => {
