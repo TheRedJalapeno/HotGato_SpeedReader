@@ -73,7 +73,7 @@ const TTS = (() => {
   }
 
   // ---------------------------------------------------------------------------
-  // Watchdog — fires every 4 s to catch silent-stop bugs in Firefox & Chrome
+  // Watchdog — fires every 12 s to catch silent-stop bugs in Firefox & Chrome
   // ---------------------------------------------------------------------------
 
   function startWatchdog() {
@@ -85,7 +85,7 @@ const TTS = (() => {
         console.log('TTS watchdog: stall detected at sentence', sentenceIndex, '— restarting');
         speakSentence(sentenceIndex);
       }
-    }, 4000);
+    }, 12000);
   }
 
   function stopWatchdog() {
