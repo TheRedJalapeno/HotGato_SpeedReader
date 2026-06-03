@@ -226,7 +226,7 @@ const TTS = (() => {
   }
 
   function resetButtonState() {
-    if (readAloudBtn) readAloudBtn.textContent = '🔊 Read Aloud (beta)';
+    if (readAloudBtn) readAloudBtn.textContent = 'Listen ▶';
   }
 
   // ---------------------------------------------------------------------------
