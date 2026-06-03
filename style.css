@@ -142,6 +142,14 @@ body.dark-theme {
   color: #cbcbcb;
 }
 
+body.light-theme img.svghelper {
+  filter: invert(69%);
+}
+
+body.dark-theme img.svghelper {
+  filter: invert(0%);
+}
+
 body.light-theme a {
   color: var(--atomic-tangerine);
 }
@@ -226,7 +234,7 @@ img.icon:hover {
 
 .inputContainer {
   max-width: 600px;
-  margin: 0 auto;
+  margin: 30px auto;
 }
 
 textarea {
@@ -242,7 +250,22 @@ textarea {
 }
 
 input[type="range"] {
-  width: 130px;
+width: 130px;
+  margin-right: 5px;
+  border: 2px solid gray;
+  border-radius: 15px;
+  appearance: none;
+  background: inherit;
+}
+
+input::-webkit-slider-thumb, 
+input::-moz-range-thumb {
+  width: 40px;
+  height: 16px;
+  background: #ff6f00;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 select {
@@ -252,17 +275,40 @@ select {
 
 label {
   display: inline-block;
-  margin: 3px 0 0 5px;
-  position: absolute;
+  position: relative;
+  top: -5px;
 }
 
+select + label {
+  top: 0;
+}
+
+img.svghelper {
+  text-decoration: underline;
+  border-bottom: 1px solid var(--atomic-tangerine);
+  height: 20px;
+}
+
+img.svg {
+  margin-bottom: -5px;
+  border-bottom: none;
+}
 
 div.inputblock {
   margin: 10px 0;
 }
 
+.controls {
+  display: flex;
+  max-width: 600px;
+  margin: auto;
+  justify-content: center;
+  flex-flow: row wrap;
+  gap: 10px;
+}
+
 button {
-  display: block;
+  display: inline-block;
   margin: 10px auto;
   padding: 0.8em 2.2em;
   background: linear-gradient(45deg, var(--atomic-tangerine), orangered);
@@ -376,22 +422,25 @@ img.linklogo {
   }
 
   div.inputblock {
-    margin: 20px 0;
-  }
+    margin: 20px auto;
+    text-align: center;
+    display: flex;
+    flex-flow: row wrap-reverse;
+    justify-content: center;
+    }
 
   textarea {
     width: 90%;
   }
 
   input[type="range"] {
-    width: auto;
-    max-width: 100px;
+    width: 75%;
   }
 
   label {
     display: inline-block;
-    margin: 3px 0 0 5px;
-    position: absolute;
+    position: inherit;
+    min-width: 250px;
   }
 
   #textOutput {

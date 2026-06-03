@@ -33,7 +33,7 @@
 
 <body class="dark-theme">
   <div id="lightdarktoggle" class="lightdarkselector" title="Toggle light mode and dark mode"><img
-      src="lightbulb_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg"></div>
+      src="lightbulb_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" class="svghelper"></div>
   <div class="mainContainer">
     <img class="icon" src="hotgato_400.jpg">
     <h1 class="title">HotGato Speed&nbsp;Reader</h1>
@@ -42,33 +42,21 @@
       <div id="textOutput" class="">
         <p id="outputText">Your text will appear here...</p>
       </div>
-      <button id="startPause" type="button">GO!</button>
-      <button id="readAloud" type="button">Read Aloud (beta v5)</button>
-      <button id="reset" type="button">Reset</button>
+    </div>
+    <div class="controls">
+      <button id="startPause" type="button">Read&nbsp;<img src="match_case_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="Read" class="svg"></button>
+      <button id="readAloud" type="button">Listen&nbsp;<img src="brand_awareness_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="Listen" class="svg"></button>
+      <button id="reset" type="button">Reset&nbsp;<img src="refresh_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="Reset" class="svg"></button>
     </div>
     <div class="inputContainer">
-      <div class="inputblock">
-        <input type="range" id="fontSize" min="10" max="80" value="25" />
-        <label for="fontSize">
-          Font Size:
-          <span id="fontValue">20</span>
-          px
-        </label>
-      </div>
       <div class="inputblock">
         <input type="range" id="speedSelector" min="100" max="1500" step="100" value="100" />
         <label for="speedSelector">
           Reading Speed:
           <span id="speedValue">100</span>
-          WPM
-        </label>
-      </div>
-      <div class="inputblock">
-        <input type="range" id="chunkSize" min="1" max="6" value="1" />
-        <label for="chunkSize">
-          Chunk Size:
-          <span id="chunkValue">1</span>
-          Words
+          WPM 
+          <img src="match_case_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="Read" class="svghelper" title="Speed Read!">
+          <img src="brand_awareness_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="Listen" class="svghelper" title="Listen Quickly!">
         </label>
       </div>
       <div class="inputblock">
@@ -76,6 +64,25 @@
         <label for="pauseSpeedSelector" title="This slows down playback for any numbers or punctuation.">
           Punctuation Pause:
           <span id="pauseSpeedValue">4</span>
+          <img src="match_case_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="Read" class="svghelper" title="Speed Read!">
+          <img src="brand_awareness_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="Listen" class="svghelper" title="Listen Quickly!">
+        </label>
+      </div>
+      <div class="inputblock">
+        <input type="range" id="fontSize" min="10" max="80" value="25" />
+        <label for="fontSize">
+          Font Size:
+          <span id="fontValue">20</span>
+          px  <img src="match_case_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="Read" class="svghelper" title="Speed Read!">
+        </label>
+      </div>
+      <div class="inputblock">
+        <input type="range" id="chunkSize" min="1" max="6" value="1" />
+        <label for="chunkSize">
+          Chunk Size:
+          <span id="chunkValue">1</span>
+          Words 
+          <img src="match_case_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="Read" class="svghelper" title="Speed Read!">
         </label>
       </div>
       <div class="inputblock">

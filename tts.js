@@ -220,8 +220,8 @@ const TTS = (() => {
 
   function setButtonState(state) {
     if (!readAloudBtn) return;
-    if (state === 'playing') { readAloudBtn.textContent = '⏸ Pause Reading';  return; }
-    if (state === 'paused')  { readAloudBtn.textContent = '▶ Resume Reading'; return; }
+    if (state === 'playing') { readAloudBtn.textContent = 'Pause ⏸';  return; }
+    if (state === 'paused')  { readAloudBtn.textContent = 'Resume ▶'; return; }
     resetButtonState();
   }
 
