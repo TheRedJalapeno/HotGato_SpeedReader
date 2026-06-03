@@ -2,16 +2,15 @@
 // Reuses splitIntoSentences() from core.js.
 // Works alongside the RSVP reader without conflict.
 //
-// Cross-browser behaviour:
-//   • Edge/Chrome:  speechSynthesis.pause()/resume() work natively.
-//                   Chrome silently drops synthesis after ~15 s; watchdog re-kicks it.
-//   • Firefox:      pause()/resume() are unreliable. Pause is implemented in
-//                   software: cancel(), save sentenceIndex, restart on resume.
-//                   Firefox also has a ~5 s silent-stop bug; watchdog catches it.
+// Architecture: one sentence at a time.
+//   Each SpeechSynthesisUtterance covers exactly one sentence. When it ends,
+//   onend fires and we speak the next one — no queuing, no watchdog needed.
+//   Settings are read fresh per sentence so slider changes take effect immediately.
 //
-//   Settings (speed, pause factor) are read fresh on every new utterance, so
-//   pressing Pause → adjust slider → Resume will use the new values on Firefox.
-//   On Edge/Chrome the new rate takes effect from the next sentence after resume.
+// Pause strategy:
+//   Edge/Chrome: native speechSynthesis.pause() / resume() work correctly.
+//   Firefox:     pause()/resume() are broken; we use software-pause instead:
+//                cancel() the current utterance, save sentenceIndex, restart on resume.
 
 const TTS = (() => {
 
@@ -19,27 +18,26 @@ const TTS = (() => {
   // State
   // ---------------------------------------------------------------------------
 
-  let ttsActive     = false;  // True while playing OR natively paused OR sw-paused
-  let ttsPaused     = false;  // True while paused (either native or software)
-  let ttsAborted    = false;  // Latched true during stop/cancel to silence callbacks
-  let swPause       = false;  // True when using software-pause path (Firefox)
+  let ttsActive  = false;  // True while playing OR paused
+  let ttsPaused  = false;  // True while paused
+  let ttsAborted = false;  // Latched true on stop/cancel to silence async callbacks
+  let swPause    = false;  // True when Firefox software-pause is in effect
 
-  let sentenceList  = [];     // string[] — rebuilt on each fresh play
-  let sentenceIndex = 0;      // Index of the sentence currently being spoken
+  let sentenceList  = [];  // string[] — built once per fresh play
+  let sentenceIndex = 0;   // Index of the sentence currently being (or about to be) spoken
 
-  let readAloudBtn  = null;
-  let resetBtn      = null;
-  let watchdog      = null;
+  let readAloudBtn = null;
+  let resetBtn     = null;
 
   // ---------------------------------------------------------------------------
-  // Browser detection — only used to choose pause strategy
+  // Browser detection — only used to select pause strategy
   // ---------------------------------------------------------------------------
 
   const isFirefox = typeof navigator !== 'undefined' &&
-                    navigator.userAgent.toLowerCase().includes('firefox');
+                    /firefox/i.test(navigator.userAgent);
 
   // ---------------------------------------------------------------------------
-  // Live settings — read from DOM every time so sliders are always current
+  // Live settings — always read from DOM so sliders are instantly current
   // ---------------------------------------------------------------------------
 
   function currentWpm() {
@@ -51,54 +49,34 @@ const TTS = (() => {
   }
 
   function wpmToRate(wpm) {
-    // 150 WPM ≈ natural speech = rate 1.0; clamp to valid [0.1, 10]
+    // 150 WPM ≈ natural conversational speed = rate 1.0. Clamp to [0.1, 10].
     return Math.min(10, Math.max(0.1, wpm / 150));
   }
 
   function pauseMsForText(text, wpm, pauseFactor) {
-    // Mirror core.js specialCharacterRegex pause logic
+    // Mirror core.js specialCharacterRegex: add a pause after punctuation / numbers
     const re = /(\d+(\.\d+)?|[.,!?'"`\n]|https?:\/\/[^\s]+|\s{2,})/g;
     return re.test(text) ? (60000 / wpm) * pauseFactor : 0;
   }
 
   // ---------------------------------------------------------------------------
-  // Sentence list
+  // Sentence list — built from the textarea via core.js splitIntoSentences()
   // ---------------------------------------------------------------------------
 
   function buildSentenceList() {
-    const raw = (document.getElementById('textInput') || {}).value || '';
+    const raw  = (document.getElementById('textInput') || {}).value || '';
     const text = raw.trim();
     if (!text) return [];
     return splitIntoSentences(text).map(s => s.trim()).filter(Boolean);
   }
 
   // ---------------------------------------------------------------------------
-  // Watchdog — fires every 12 s to catch silent-stop bugs in Firefox & Chrome
-  // ---------------------------------------------------------------------------
-
-  function startWatchdog() {
-    stopWatchdog();
-    watchdog = setInterval(() => {
-      if (!ttsActive || ttsPaused || ttsAborted) return;
-      const ss = window.speechSynthesis;
-      if (!ss.speaking && !ss.pending) {
-        console.log('TTS watchdog: stall detected at sentence', sentenceIndex, '— restarting');
-        speakSentence(sentenceIndex);
-      }
-    }, 12000);
-  }
-
-  function stopWatchdog() {
-    if (watchdog !== null) { clearInterval(watchdog); watchdog = null; }
-  }
-
-  // ---------------------------------------------------------------------------
-  // Core speak primitive — settings read fresh every call
+  // Core: speak a single sentence, then chain to the next via onend
   // ---------------------------------------------------------------------------
 
   function speakSentence(index) {
-    if (ttsAborted || index >= sentenceList.length) {
-      if (!ttsAborted) onTTSEnd();
+    if (ttsAborted || ttsPaused || index >= sentenceList.length) {
+      if (!ttsAborted && !ttsPaused) onTTSEnd();
       return;
     }
 
@@ -120,6 +98,7 @@ const TTS = (() => {
 
     u.onend = () => {
       if (ttsAborted || ttsPaused) return;
+
       const extraMs = pauseMsForText(text, wpm, pauseFactor);
       if (extraMs > 0) {
         setTimeout(() => {
@@ -131,8 +110,9 @@ const TTS = (() => {
     };
 
     u.onerror = (e) => {
+      // 'interrupted' / 'canceled' fire when we call cancel() ourselves — ignore
       if (e.error === 'interrupted' || e.error === 'canceled') return;
-      console.warn('TTS utterance error:', e.error, '— skipping to next sentence');
+      console.warn('TTS error on sentence', index, ':', e.error, '— skipping');
       if (!ttsAborted && !ttsPaused) speakSentence(index + 1);
     };
 
@@ -157,9 +137,8 @@ const TTS = (() => {
                 '| rate', wpmToRate(wpm).toFixed(2));
 
     setButtonState('playing');
-    startWatchdog();
 
-    // Cancel any stale synthesis before enqueueing (Edge can get stuck otherwise)
+    // Cancel any stale synthesis before starting fresh
     window.speechSynthesis.cancel();
     setTimeout(() => {
       if (!ttsAborted) speakSentence(sentenceIndex);
@@ -170,21 +149,16 @@ const TTS = (() => {
     if (!ttsActive || ttsPaused) return;
 
     ttsPaused = true;
-    stopWatchdog();
     setButtonState('paused');
 
     if (isFirefox) {
-      // Software pause: latch ttsAborted so onend callbacks stop advancing the queue,
-      // cancel the current utterance, then immediately un-latch ttsAborted so that
-      // resume() can call speakSentence() without interference.
       swPause    = true;
       ttsAborted = true;
       window.speechSynthesis.cancel();
-      // Un-latch after cancel has had time to flush (Firefox needs a small gap)
+      // Un-latch ttsAborted after cancel flushes so resume() can call speakSentence()
       setTimeout(() => { ttsAborted = false; }, 150);
-      console.log('TTS paused (software) at sentence', sentenceIndex);
+      console.log('TTS paused (software/Firefox) at sentence', sentenceIndex);
     } else {
-      // Native pause — Edge/Chrome
       swPause = false;
       window.speechSynthesis.pause();
       console.log('TTS paused (native) at sentence', sentenceIndex);
@@ -203,14 +177,11 @@ const TTS = (() => {
     ttsPaused  = false;
     ttsAborted = false;
     setButtonState('playing');
-    startWatchdog();
 
     if (swPause) {
-      // Firefox software-pause path: restart from saved sentence
       swPause = false;
       speakSentence(sentenceIndex);
     } else {
-      // Native resume — Edge/Chrome
       window.speechSynthesis.resume();
     }
   }
@@ -222,7 +193,6 @@ const TTS = (() => {
     ttsPaused     = false;
     swPause       = false;
     sentenceIndex = 0;
-    stopWatchdog();
     window.speechSynthesis.cancel();
     resetButtonState();
   }
@@ -241,7 +211,6 @@ const TTS = (() => {
     swPause       = false;
     sentenceIndex = 0;
     sentenceList  = [];
-    stopWatchdog();
     resetButtonState();
   }
 
@@ -269,9 +238,7 @@ const TTS = (() => {
       alert('Sorry, your browser does not support text-to-speech.');
       return;
     }
-
     if (!ttsActive) {
-      // Fresh start — always rebuild sentence list to pick up any text/setting changes
       sentenceList  = buildSentenceList();
       sentenceIndex = 0;
       start(0);
@@ -322,20 +289,20 @@ const TTS = (() => {
       return;
     }
 
-    console.log('TTS: init — browser is', isFirefox ? 'Firefox (software pause)' : 'non-Firefox (native pause)');
+    console.log('TTS: init —', isFirefox ? 'Firefox (software pause)' : 'non-Firefox (native pause)');
 
     readAloudBtn.addEventListener('click', handleReadAloudClick);
 
     if (resetBtn) {
       resetBtn.addEventListener('click', handleResetClick);
-      console.log('TTS: #reset button found and wired.');
+      console.log('TTS: #reset button wired.');
     } else {
-      console.warn('TTS: #reset button not found in DOM — add <button id="reset"> to HTML.');
+      console.warn('TTS: #reset button not found — add <button id="reset"> to HTML.');
     }
 
     patchStartPauseButton();
 
-    // Stop TTS when user edits the textarea (sentence list would be stale)
+    // Stop TTS if the user edits the textarea (sentence list would be stale)
     const textInputEl = document.getElementById('textInput');
     if (textInputEl) {
       textInputEl.addEventListener('input', () => {
@@ -346,7 +313,7 @@ const TTS = (() => {
       });
     }
 
-    // Prime the voice list (async on Safari iOS / some Android)
+    // Prime the voice list (loads asynchronously on Safari iOS / some Android)
     if (typeof window.speechSynthesis.onvoiceschanged !== 'undefined') {
       window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
     }
