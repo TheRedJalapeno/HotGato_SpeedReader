@@ -154,7 +154,7 @@ fontFamilySelector.addEventListener('change', function() {
       let chunk = words.slice(0, chunkEnd);
       let chunkText = chunk.join(' ');
       
-      console.log("Preview chunk:", chunk);
+      //console.log("Preview chunk:", chunk);
       
       // Set the first chunk as the text output
       textOutput.textContent = chunkText;
@@ -674,13 +674,13 @@ function startReading() {
       setTimeout(nextChunk, delay);
     }
 
-    console.log("Current chunk:", chunk);
+    //console.log("Current chunk:", chunk);
   }
 
   nextChunk();
 
-  console.log("Sentences array:", sentences);
-  console.log("Chunks array:", chunks);
+  //console.log("Sentences array:", sentences);
+  //console.log("Chunks array:", chunks);
 }
 // END of startReading function
 
