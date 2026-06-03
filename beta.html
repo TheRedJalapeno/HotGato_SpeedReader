@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HotGato Speed Reader</title>
+  <link rel="icon" href="hotgato_favi.jpg" type="image/jpeg" />
+  <script src="core.js" defer></script>
+  <script src="tts.js" defer></script>
+  <script src="darkmode.js" defer></script>
+  <link rel="stylesheet" href="style.css">
+  <meta name="title" content="HotGato Speed Reader">
+  <meta seom="description"
+    content="HotGato Speed Reader is the most advanced speed reading tool on the internet. It allows you to read text at adjustable speeds, with automatic punctuation pauses, customizable font styles, and document uploads.">
+  <meta name="keywords" content="speed reading, text reader, adjustable speed, font size, font style, web-based reader">
+  <meta name="author" content="ZingLab LLC">
+  <meta name="robots" content="index, follow">
+  <meta name="googlebot" content="index, follow">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="HotGato Speed Reader">
+  <meta property="og:description"
+    content="HotGato Speed Reader is the most advanced speed reading tool on the internet. It allows you to read text at adjustable speeds, with automatic punctuation pauses, customizable font styles, and document uploads.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://hotgato.com/">
+  <meta property="og:image" content="https://hotgato.com/hotgato_400.jpg">
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:title" content="HotGato Speed Reader">
+  <meta property="twitter:description"
+    content="HotGato Speed Reader is the most advanced speed reading tool on the internet. It allows you to read text at adjustable speeds, with automatic punctuation pauses, customizable font styles, and document uploads.">
+  <meta property="twitter:image" content="https://hotgato.com/hotgato_400.jpg">
+</head>
+
+<body class="dark-theme">
+  <div id="lightdarktoggle" class="lightdarkselector" title="Toggle light mode and dark mode"><img
+      src="lightbulb_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg"></div>
+  <div class="mainContainer">
+    <img class="icon" src="hotgato_400.jpg">
+    <h1 class="title">HotGato Speed&nbsp;Reader</h1>
+
+    <div class="outputBlock">
+      <div id="textOutput" class="">
+        <p id="outputText">Your text will appear here...</p>
+      </div>
+      <button id="startPause" type="button">GO!</button>
+      <button id="readAloud" type="button">Read Aloud (beta)</button>
+    </div>
+    <div class="inputContainer">
+      <div class="inputblock">
+        <input type="range" id="fontSize" min="10" max="80" value="25" />
+        <label for="fontSize">
+          Font Size:
+          <span id="fontValue">20</span>
+          px
+        </label>
+      </div>
+      <div class="inputblock">
+        <input type="range" id="speedSelector" min="100" max="1500" step="100" value="100" />
+        <label for="speedSelector">
+          Reading Speed:
+          <span id="speedValue">100</span>
+          WPM
+        </label>
+      </div>
+      <div class="inputblock">
+        <input type="range" id="chunkSize" min="1" max="6" value="1" />
+        <label for="chunkSize">
+          Chunk Size:
+          <span id="chunkValue">1</span>
+          Words
+        </label>
+      </div>
+      <div class="inputblock">
+        <input type="range" id="pauseSpeedSelector" min="1" max="10" step=".5" value="4" />
+        <label for="pauseSpeedSelector" title="This slows down playback for any numbers or punctuation.">
+          Punctuation Pause:
+          <span id="pauseSpeedValue">4</span>
+        </label>
+      </div>
+      <div class="inputblock">
+        <select id="fontFamily">
+          <option value="Bionic">Bionic</option>
+          <option value="Dyslexia">Dyslexia</option>
+          <option selected value="sans-serif">Sans-Serif</option>
+          <option value="serif">Serif</option>
+          <option value="monospace">Monospace</option>
+          <!-- include other fonts -->
+        </select>
+        <label for="fontFamily">Font Family</label>
+      </div>
+      <div class="inputblock">
+        <textarea id="textInput" placeholder="Enter your text here..."></textarea>
+      </div>
+      <div class="file-upload-section">
+        <label for="fileInput">Upload a file:</label>
+        <input type="file" id="fileInput" accept=".txt,.pdf,.docx,.epub,.rtf,.odt,.html,.htm,.md,.markdown,.log" />
+        <p class="file-help-text">Supported formats: TXT, PDF, DOCX, EPUB, RTF, ODT, HTML, Markdown</p>
+        <p class="file-help-text">Documents are not sent anywhere - they are processed in your browser only.</p>
+        <p class="file-help-text">Sample text provided from my book, <a href="https://www.amazon.com/s?k=Robert-Willnow" target="_blank">Kolnari Prologue</a>.</p>
+      </div>
+      <br>
+      <div>
+        <button class="donate">
+          <a href="https://donate.stripe.com/6oU5kC1BgcAf5CS1C79IQ09" target="_blank" style="color:var(--light)">Donate a Five or Tenner</a>
+        </button>
+      </div>
+      <br>
+    </div>
+    <div class="inputContainer">
+      <!-- Instructions -->
+      <div>
+        <h3>How to use HotGato</h3>
+        <p>Bump up the font size, sit back, and relax your eyes. Do not try to read, just try to relax. Your brain will
+          pull the words in all by itself.</p>
+        <p>When getting used to this sort of reading, use one or two paragraphs, start at 300 wpm, and reread it until
+          you get the hang of it. It might take a few tries, but it will click for you and become easy. After that you
+          can start experimenting with speed, chunk size, and punctuation pauses.</p>
+        <p>Everyone has different preferences for their settings, so once you found something comfortable, add new text
+          and see what you can do!</p>
+      </div>
+    </div>
+    <div class="inputContainer">
+      <!-- About -->
+      <h3>About HotGato</h3>
+      <ul>
+        <li><strong>Private</strong> - All file uploads stay in your browser, nothing is uploaded to the internet or anywhere else.</li>
+        <li><strong>Editable</strong> - You can edit the code to suit your needs, or fork in Github.</li>
+        <li><strong>Secure</strong> - All code is client-side, you can download for offline use, and even get IT
+          approval for use with confidential materials.</li>
+        <li><strong>Accessible</strong> - Font selector includes a "bionic reading" setting and non-fungible
+          'cursive' fonts for Dyslexia.</li>
+        <li><strong>Comfortable</strong> - Speed automatically slows for all numbers and special characters so you can
+          read 3.89 and 3.98 with ease.</li>
+        <li><strong>Thoughtful</strong> - Your settings are remembered in your browser for convenience.</li>
+        <li><strong>OpenSource</strong> - You are welcome to check the codebase for <a
+            href="https://github.com/TheRedJalapeno/HotGato_SpeedReader" target="_blank">HotGato on Github</a>.</li>
+        <li><strong>Donation Supported</strong> - If you want to support me, you are invited to <a href="https://www.amazon.com/s?k=Robert-Willnow" target="_blank">buy one of my books</a> or <a href="https://donate.stripe.com/6oU5kC1BgcAf5CS1C79IQ09" target="_blank">donate via Stripe</a>.</li>
+      </ul>
+    </div>
+    <!-- External Links -->
+    <div class="inputContainer">
+      <h3>Links</h3>
+      <div class="container">
+
+        <a class="extlinks"
+          href="https://chromewebstore.google.com/detail/hotgato-speed-reader/ogecmlkfllamfilgdigmaifjcbmfhgib"
+          target="_blank">
+          <div class="sidebyside">
+            <img class="linklogo" src="chrome.svg">
+            <p>Chrome<br>Extension</p>
+          </div>
+        </a>
+
+        <a class="extlinks" href="https://addons.mozilla.org/en-US/firefox/addon/hotgato-speed-reader/" target="_blank">
+          <div class="sidebyside">
+            <img class="linklogo" src="firefox.svg">
+            <p>Firefox<br>Add-On</p>
+          </div>
+        </a>
+
+        <a class="extlinks" href="https://github.com/TheRedJalapeno/HotGato_SpeedReader" target="_blank">
+          <div class="sidebyside">
+            <img class="linklogo" src="github.svg">
+            <p>HotGato<br>on Github</p>
+          </div>
+        </a>
+
+        <a class="extlinks" href="https://www.amazon.com/s?k=Robert-Willnow" target="_blank">
+          <div class="sidebyside">
+            <img class="linklogo" src="auto_stories_36dp_F19E39_FILL0_wght700_GRAD200_opsz40.svg">
+            <p>Read<br>My Books</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer id="footer" class="footer">
+        <div class="footerLinks">
+            <div class="links">
+              <h4>Personal</h4>
+                <a href="/">Home/Refresh</a>
+                <a href="https://donate.stripe.com/6oU5kC1BgcAf5CS1C79IQ09" target="_blank">Donate via Stripe &nearr;</a>
+                <a href="https://www.amazon.com/s?k=Robert-Willnow" target="_blank">Support me via Amazon &nearr;</a>
+                <a href="https://www.barnesandnoble.com/s/'Robert%20Willnow'" target="_blank">Support me via Barnes &amp; Noble &nearr;</a>
+                <a href="mailto:hotgato@zinglab.com?subject=HotGato%20rocks!!!&body=Holy%20moly%20duderino%2C%20this%20cat%20cooks!">Email me</a>
+              </div>
+              <div class="links">
+                <h4>Business</h4>
+                <a href="/enterprise">Licensing Info</a>
+                <a href="/enterprise">Enterprise Services</a>
+                <a href="/terms">Terms of Use</a>
+                <a href="/privacy">Privacy Policy</a>
+                <a href="https://billing.stripe.com/p/login/28ocNK61qd1V2dOaEE" target="_blank">Manage Business Subscription &nearr;</a>
+            </div>
+        </div>
+        <hr>
+    <div class="copyright">
+      <p>Copyright &copy;
+        <script>document.write(new Date().getFullYear())</script>, <a href="https://zinglab.com/?utm_source=hotgato"
+          target="_blank">ZingLab LLC</a>
+      </p>
+      <p><a href="https://zinglab.com/?utm_source=hotgato" target="_blank"><img
+            src="experiment_36dp_F19E39_FILL0_wght400_GRAD0_opsz40.svg" style="height:24px;width:24px;"></a></p>
+    </div>
+  </footer>
+
+
+  <deleteThisForOfflineMode>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2SDKE8KJHN"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+
+      gtag('config', 'G-2SDKE8KJHN');
+    </script>
+  </deleteThisForOfflineMode>
+
+
+</body>
+
+</html>
